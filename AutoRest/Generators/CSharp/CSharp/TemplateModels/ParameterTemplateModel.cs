@@ -20,5 +20,13 @@ namespace Microsoft.Rest.Generator.CSharp
         {
             get { return Type.Name; }
         }
+
+        public virtual string ParameterAccessor
+        {
+            get
+            {
+                return this.Name;
+            }
+        }
     }
 }

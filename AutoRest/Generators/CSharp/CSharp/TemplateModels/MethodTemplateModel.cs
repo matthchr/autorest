@@ -65,7 +65,7 @@ namespace Microsoft.Rest.Generator.CSharp
             get
             {
                 List<string> declarations = new List<string>();
-                foreach (var parameter in  LocalParameters)
+                foreach (var parameter in LocalParameters)
                 {
                     string format = (parameter.IsRequired ? "{0} {1}" : "{0} {1} = {2}");
                     string defaultValue = string.Format(CultureInfo.InvariantCulture, "default({0})", parameter.DeclarationExpression);
@@ -146,7 +146,7 @@ namespace Microsoft.Rest.Generator.CSharp
         }
 
         /// <summary>
-        /// Get the parameters that are actually method parameters in the order they apopear in the method signatur
+        /// Get the parameters that are actually method parameters in the order they appear in the method signature
         /// exclude global parameters
         /// </summary>
         public IEnumerable<ParameterTemplateModel> LocalParameters
@@ -155,7 +155,7 @@ namespace Microsoft.Rest.Generator.CSharp
             {
                 return
                     ParameterTemplateModels.Where(
-                        p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
+                        p => p != null && p.ClientProperty == null && string.IsNullOrEmpty(p.ParameterGroup) && !string.IsNullOrWhiteSpace(p.Name))
                         .OrderBy(item => !item.IsRequired);
             }
         }
@@ -339,7 +339,7 @@ namespace Microsoft.Rest.Generator.CSharp
                 builder.AppendLine("{0} = {0}.Replace(\"{{{1}}}\", Uri.EscapeDataString({2}));",
                     variableName,
                     pathParameter.SerializedName,
-                    pathParameter.Type.ToString(ClientReference, pathParameter.Name));
+                    pathParameter.Type.ToString(ClientReference, pathParameter.ParameterAccessor));
             }
             if (ParameterTemplateModels.Any(p => p.Location == ParameterLocation.Query))
             {
@@ -347,7 +347,7 @@ namespace Microsoft.Rest.Generator.CSharp
                 foreach (var queryParameter in ParameterTemplateModels
                     .Where(p => p.Location == ParameterLocation.Query))
                 {
-                    builder.AppendLine("if ({0} != null)", queryParameter.Name)
+                    builder.AppendLine("if ({0} != null)", queryParameter.ParameterAccessor)
                         .AppendLine("{").Indent()
                         .AppendLine("queryParameters.Add(string.Format(\"{0}={{0}}\", Uri.EscapeDataString({1})));",
                             queryParameter.SerializedName, queryParameter.GetFormattedReferenceValue(ClientReference)).Outdent()

@@ -67,6 +67,11 @@ namespace Microsoft.Rest.Generator.CSharp
                     {
                         parameter.Name = scope.GetVariableName(parameter.Name);
                     }
+
+                    if (!string.IsNullOrEmpty(parameter.ParameterGroup))
+                    {
+                        parameter.ParameterGroup = this.GetTypeName(parameter.ParameterGroup);
+                    }
                 }
             }
         }

@@ -59,6 +59,27 @@ namespace Microsoft.Rest.Generator.ClientModel
         public List<Parameter> Parameters { get; private set; }
 
         /// <summary>
+        /// Gets the parameter groups.
+        /// </summary>
+        public IEnumerable<string> ParameterGroups
+        {
+            get
+            {
+                List<string> parameterGroups = new List<string>();
+                
+                foreach (Parameter parameter in this.Parameters)
+                {
+                    if (!string.IsNullOrEmpty(parameter.ParameterGroup))
+                    {
+                        parameterGroups.Add(parameter.ParameterGroup);
+                    }
+                }
+
+                return parameterGroups.Distinct();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets request headers.
         /// </summary>
         public Dictionary<string, string> RequestHeaders { get; private set; }

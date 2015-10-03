@@ -208,7 +208,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                         queryParametersAddString = "queryParameters.Add(string.Format(\"{0}={{0}}\", {1}));";
                     }
 
-                    builder.AppendLine("if ({0} != null)", queryParameter.Name)
+                    builder.AppendLine("if ({0} != null)", queryParameter.ParameterAccessor)
                         .AppendLine("{").Indent()
                         .AppendLine(queryParametersAddString,
                             queryParameter.SerializedName, queryParameter.GetFormattedReferenceValue(ClientReference))
@@ -236,7 +236,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                 builder.AppendLine(replaceString,
                     variableName,
                     pathParameter.SerializedName,
-                    pathParameter.Type.ToString(ClientReference, pathParameter.Name));
+                    pathParameter.Type.ToString(ClientReference, pathParameter.ParameterAccessor));
             }
         }
     }

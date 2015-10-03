@@ -71,6 +71,15 @@ namespace Microsoft.Rest.Generator.ClientModel
         /// </summary>
         public string Documentation { get; set; }
 
+        /// <summary>
+        /// Gets or sets the parameter group.
+        /// </summary>
+        public string ParameterGroup { get; set; }
+
+        /// <summary>
+        /// True if this parameter represents a parameter group, false otherwise
+        /// </summary>
+        public bool IsParameterGroup { get; set; }
 
         /// <summary>
         /// Gets vendor extensions dictionary.

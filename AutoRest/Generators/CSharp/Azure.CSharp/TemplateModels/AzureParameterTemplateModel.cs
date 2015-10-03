@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using Microsoft.Rest.Generator.ClientModel;
+using Microsoft.Rest.Generator.Azure;
 
 namespace Microsoft.Rest.Generator.CSharp.Azure
 {
@@ -29,6 +30,21 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                 }
 
                 return base.DeclarationExpression;
+            }
+        }
+
+        public override string ParameterAccessor
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.ParameterGroup))
+                {
+                    return base.ParameterAccessor;
+                }
+                else
+                {
+                    return AzureCodeGenerator.ParameterGroupName + CodeNamer.PascalCase(base.ParameterAccessor);
+                }
             }
         }
     }

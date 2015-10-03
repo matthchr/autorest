@@ -121,7 +121,7 @@ namespace Microsoft.Rest.Generator.CSharp.TemplateModels
         /// <param name="parameter">The parameter to format</param>
         /// <param name="clientReference">The reference to the client</param>
         /// <returns>A reference to the formatted parameter value</returns>
-        public static string GetFormattedReferenceValue(this Parameter parameter, string clientReference)
+        public static string GetFormattedReferenceValue(this ParameterTemplateModel parameter, string clientReference)
         {
             if (parameter == null)
             {
@@ -131,7 +131,7 @@ namespace Microsoft.Rest.Generator.CSharp.TemplateModels
             SequenceType sequence = parameter.Type as SequenceType;
             if (sequence == null)
             {
-                return parameter.Type.ToString(clientReference, parameter.Name);
+                return parameter.Type.ToString(clientReference, parameter.ParameterAccessor);
             }
 
             PrimaryType primaryType = sequence.ElementType as PrimaryType;
