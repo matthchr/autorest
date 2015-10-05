@@ -16,6 +16,7 @@ using Fixtures.Azure.AcceptanceTestsPaging;
 using Fixtures.Azure.AcceptanceTestsResourceFlattening;
 using Fixtures.Azure.AcceptanceTestsResourceFlattening.Models;
 using Fixtures.Azure.AcceptanceTestsSubscriptionIdApiVersion;
+using Fixtures.Azure.AcceptanceTestsAzureParameterGrouping;
 using Microsoft.Rest.Azure;
 using Microsoft.Rest.Generator.CSharp.Azure.Tests.Properties;
 using Microsoft.Rest.Generator.CSharp.Tests;
@@ -683,6 +684,52 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 AzureOperationResponse response = client.Header.CustomNamedRequestIdWithHttpMessagesAsync(expectedRequestId).Result;
 
                 Assert.Equal("123", response.RequestId);
+            }
+        }
+        
+        public void ParameterGroupingTests()
+        {
+            const int body = 1234;
+            const string header = "header";
+            const int query = 21;
+            const string path = "path";
+
+            using (var client = new AutoRestParameterGroupingTestService(
+                Fixture.Uri, 
+                new TokenCredentials(Guid.NewGuid().ToString())))
+            {
+                //Valid required parameters
+                ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters(body, path)
+                    {
+                        Header = header,
+                        Query = query
+                    };
+
+                client.ParameterGrouping.PostRequired(requiredParameters);
+
+                //Required parameters but null optional parameters
+                requiredParameters = new ParameterGroupingPostRequiredParameters(body, path);
+
+                client.ParameterGrouping.PostRequired(requiredParameters);
+
+                //Required parameters object is not null, but a required property of the object is
+                requiredParameters = new ParameterGroupingPostRequiredParameters(null, path);
+                Assert.Throws<ValidationException>(() => client.ParameterGrouping.PostRequired(requiredParameters));
+
+                //null required parameters
+                Assert.Throws<ValidationException>(() => client.ParameterGrouping.PostRequired(null));
+
+                //Valid optional parameters
+                ParameterGroupingPostOptionalParameters optionalParameters = new ParameterGroupingPostOptionalParameters()
+                    {
+                        Header = header,
+                        Query = query
+                    };
+
+                client.ParameterGrouping.PostOptional(optionalParameters);
+
+                //null optional paramters
+                client.ParameterGrouping.PostOptional(null);
             }
         }
     }

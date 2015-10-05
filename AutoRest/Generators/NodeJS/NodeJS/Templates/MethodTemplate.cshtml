@@ -59,7 +59,7 @@
     var type = groupParameter.Type as CompositeType;
     foreach (var property in type.Properties)
     {
-  @:var @(groupParameter.Name)@(CodeNamer.PascalCase(property.Name)) = @string.Format(CultureInfo.InvariantCulture, "({0} ? undefined : {0}.{1})", groupParameter.Name, property.Name);
+  @:var @(groupParameter.Name)@(CodeNamer.PascalCase(property.Name)) = @string.Format(CultureInfo.InvariantCulture, "({0} ? {0}.{1} : undefined)", groupParameter.Name, property.Name);
     }
   }
 
