@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
 using Microsoft.Rest.Generator.ClientModel;
 using Microsoft.Rest.Generator.NodeJS;
 using Microsoft.Rest.Generator.Utilities;
@@ -12,8 +13,18 @@ namespace Microsoft.Rest.Generator.Azure.NodeJS
         public AzureMethodTemplateModel(Method source, ServiceClient serviceClient)
             : base(source, serviceClient)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            
+            
             this.ClientRequestIdString = AzureCodeGenerator.GetClientRequestIdString(source);
             this.RequestIdString = AzureCodeGenerator.GetRequestIdString(source);
+
+            // Clear the ParameterTemplateModels and re-populate with dervied types (AzureParameterTemplateModels)
+            ParameterTemplateModels.Clear();
+            source.Parameters.ForEach(p => ParameterTemplateModels.Add(new AzureParameterTemplateModel(p)));
         }
         
         public string ClientRequestIdString { get; private set; }

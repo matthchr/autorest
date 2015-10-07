@@ -153,7 +153,7 @@ namespace Microsoft.Rest.Generator.NodeJS
             get
             {
                 return ParameterTemplateModels.Where(
-                    p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
+                    p => p != null && p.ClientProperty == null && string.IsNullOrEmpty(p.ParameterGroup) && !string.IsNullOrWhiteSpace(p.Name))
                     .OrderBy(item => !item.IsRequired);
             }
         }
@@ -423,16 +423,16 @@ namespace Microsoft.Rest.Generator.NodeJS
                     {
                         if (parameter.IsRequired)
                         {
-                            builder.AppendLine("if ({0} === null || {0} === undefined) {{", parameter.Name)
+                            builder.AppendLine("if ({0} === null || {0} === undefined) {{", parameter.ParameterAccessor)
                                      .Indent()
-                                     .AppendLine("throw new Error('{0} cannot be null or undefined.');", parameter.Name)
+                                     .AppendLine("throw new Error('{0} cannot be null or undefined.');", parameter.ParameterAccessor)
                                    .Outdent()
                                    .AppendLine("}");
                         }
                     }
 
                     {
-                        builder.AppendLine(parameter.Type.ValidateType(Scope, parameter.Name, parameter.IsRequired));
+                        builder.AppendLine(parameter.Type.ValidateType(Scope, parameter.ParameterAccessor, parameter.IsRequired));
                     }
                 }
                 return builder.ToString();
@@ -583,7 +583,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                 }
                 if (!queryParameter.IsRequired)
                 {
-                    builder.AppendLine("if ({0} !== null && {0} !== undefined) {{", queryParameter.Name)
+                    builder.AppendLine("if ({0} !== null && {0} !== undefined) {{", queryParameter.ParameterAccessor)
                         .Indent()
                         .AppendLine(queryAddFormat,
                             queryParameter.SerializedName, queryParameter.GetFormattedReferenceValue()).Outdent()
@@ -617,7 +617,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                     pathReplaceFormat = "{0} = {0}.replace('{{{1}}}', {2});";
                 }
                 builder.AppendLine(pathReplaceFormat, variableName, pathParameter.SerializedName,
-                    pathParameter.Type.ToString(pathParameter.Name));
+                    pathParameter.Type.ToString(pathParameter.ParameterAccessor));
             }
         }
 

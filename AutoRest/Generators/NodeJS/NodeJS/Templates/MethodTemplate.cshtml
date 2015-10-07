@@ -1,5 +1,7 @@
 @using System
+@using System.Globalization
 @using System.Linq;
+@using Microsoft.Rest.Generator
 @using Microsoft.Rest.Generator.ClientModel
 @using Microsoft.Rest.Generator.Utilities
 @using Microsoft.Rest.Generator.NodeJS
@@ -52,6 +54,15 @@
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
+  @foreach (var groupParameter in Model.ParameterTemplateModels.Where(p => p.IsParameterGroup))
+  {
+    var type = groupParameter.Type as CompositeType;
+    foreach (var property in type.Properties)
+    {
+  @:var @(groupParameter.Name)@(CodeNamer.PascalCase(property.Name)) = @string.Format(CultureInfo.InvariantCulture, "({0} ? undefined : {0}.{1})", groupParameter.Name, property.Name);
+    }
+  }
+
   @if (Model.ParameterTemplateModels.Any())
   {
       var validationBlock = Model.ValidationString;
@@ -89,10 +100,10 @@
 
   // Set Headers
   @(Model.SetDefaultHeaders)
-  @foreach (var parameter in Model.Parameters.Where(p => p.Location == ParameterLocation.Header))
+  @foreach (var parameter in Model.ParameterTemplateModels.Where(p => p.Location == ParameterLocation.Header))
   {
-  @:if (@(parameter.Name) !== null) {
-  @:  httpRequest.headers['@(parameter.SerializedName)'] = @parameter.Type.ToString(parameter.Name);
+  @:if (@(parameter.ParameterAccessor) !== undefined && @(parameter.ParameterAccessor) !== null) {
+  @:  httpRequest.headers['@(parameter.SerializedName)'] = @parameter.Type.ToString(parameter.ParameterAccessor);
   @:}
   }
   if(options) {
@@ -124,7 +135,7 @@
   }
   else
   {
-    @:@(Model.RequestBody.Type.SerializeType(Model.Scope, Model.RequestBody.Name, "requestModel", Model.RequestBody.IsRequired))
+    @:@(Model.RequestBody.Type.SerializeType(Model.Scope, Model.RequestBody.ParameterAccessor, "requestModel", Model.RequestBody.IsRequired))
     @:requestContent = JSON.stringify(requestModel);
   }
   } catch (error) {

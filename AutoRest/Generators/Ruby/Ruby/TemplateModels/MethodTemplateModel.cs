@@ -153,9 +153,10 @@ namespace Microsoft.Rest.Generator.Ruby
         {
             get
             {
+                //Omit parameter group parameters for now since AutoRest-Ruby doesn't support them
                 return
                     ParameterTemplateModels.Where(
-                        p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
+                        p => p != null && p.ClientProperty == null && !p.IsParameterGroup && !string.IsNullOrWhiteSpace(p.Name))
                         .OrderBy(item => !item.IsRequired);
             }
         }

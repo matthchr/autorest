@@ -232,8 +232,9 @@ namespace Microsoft.Rest.Generator.Java
         {
             get
             {
+                //Omit parameter-group properties for now since Java doesn't support them yet
                 return ParameterTemplateModels.Where(
-                    p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
+                    p => p != null && p.ClientProperty == null && !p.IsParameterGroup && !string.IsNullOrWhiteSpace(p.Name))
                     .OrderBy(item => !item.IsRequired);
             }
         }

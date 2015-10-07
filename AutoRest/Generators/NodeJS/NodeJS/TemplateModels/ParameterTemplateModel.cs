@@ -38,5 +38,13 @@ namespace Microsoft.Rest.Generator.NodeJS
                 return result;
             }
         }
+
+        public virtual string ParameterAccessor
+        {
+            get
+            {
+                return this.Name;
+            }
+        }
     }
 }
