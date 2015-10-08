@@ -51,7 +51,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 List<string> declarations = new List<string>();
-                foreach (var parameter in ParameterTemplateModels)
+                foreach (var parameter in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
                 {
                     StringBuilder declarationBuilder = new StringBuilder();
                     if (Url.Contains("{" + parameter.Name + "}"))
@@ -112,7 +112,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 List<string> declarations = new List<string>();
-                foreach (var parameter in ParameterTemplateModels)
+                foreach (var parameter in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
                 {
                     if ((parameter.Location != ParameterLocation.Body)
                          && parameter.Type.NeedsSpecialSerialization())
@@ -154,7 +154,8 @@ namespace Microsoft.Rest.Generator.Java
                         param.Type != PrimaryType.Double &&
                         param.Type != PrimaryType.Boolean &&
                         param.Type != PrimaryType.Long &&
-                        param.IsRequired)
+                        param.IsRequired && 
+                        !param.IsParameterGroup)
                     {
                         yield return param;
                     }
@@ -166,7 +167,7 @@ namespace Microsoft.Rest.Generator.Java
         {
             get
             {
-                foreach (var param in ParameterTemplateModels)
+                foreach (var param in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
                 {
                     if (param.Type is PrimaryType ||
                         param.Type is EnumType)

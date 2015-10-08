@@ -47,8 +47,9 @@ namespace Microsoft.Rest.Generator.Java
         {
             get
             {
+                //Omit parameter group types for now since they don't get generated
                 var parameters = this.MethodTemplateModels
-                    .SelectMany(m => m.ParameterTemplateModels);
+                    .SelectMany(m => m.ParameterTemplateModels.Where(template => !template.IsParameterGroup));
 
                 var types = parameters.Select(p => p.Type)
                     .Concat(this.MethodTemplateModels.SelectMany(mtm => mtm.Responses.Select(res => res.Value)))
@@ -94,7 +95,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 IList<IType> types = this.MethodTemplateModels
-                    .SelectMany(mtm => mtm.Parameters.Select(p => p.Type))
+                    .SelectMany(mtm => mtm.Parameters.Where(param => !param.IsParameterGroup).Select(p => p.Type))
                     .Concat(this.MethodTemplateModels.Select(mtm => mtm.ReturnType))
                     .Distinct()
                     .ToList();
