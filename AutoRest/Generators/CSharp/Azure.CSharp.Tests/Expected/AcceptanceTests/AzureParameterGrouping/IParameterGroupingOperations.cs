@@ -25,7 +25,7 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// <summary>
         /// Post a bunch of required parameters grouped
         /// </summary>
-        /// <param name='parameters'>
+        /// <param name='parameterGroupingPostRequiredParameters'>
         /// Additional parameters for the operation
         /// </param>
         /// <param name='customHeaders'>
@@ -34,11 +34,11 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<AzureOperationResponse> PostRequiredWithHttpMessagesAsync(ParameterGroupingPostRequiredParameters parameters, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<AzureOperationResponse> PostRequiredWithHttpMessagesAsync(ParameterGroupingPostRequiredParameters parameterGroupingPostRequiredParameters, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
         /// Post a bunch of optional parameters grouped
         /// </summary>
-        /// <param name='parameters'>
+        /// <param name='parameterGroupingPostOptionalParameters'>
         /// Additional parameters for the operation
         /// </param>
         /// <param name='customHeaders'>
@@ -47,6 +47,22 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<AzureOperationResponse> PostOptionalWithHttpMessagesAsync(ParameterGroupingPostOptionalParameters parameters = default(ParameterGroupingPostOptionalParameters), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<AzureOperationResponse> PostOptionalWithHttpMessagesAsync(ParameterGroupingPostOptionalParameters parameterGroupingPostOptionalParameters = default(ParameterGroupingPostOptionalParameters), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Post parameters from multiple different parameter groups
+        /// </summary>
+        /// <param name='firstParameterGroup'>
+        /// Additional parameters for the operation
+        /// </param>
+        /// <param name='secondParameterGroup'>
+        /// Additional parameters for the operation
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<AzureOperationResponse> PostMultipleParameterGroupsWithHttpMessagesAsync(FirstParameterGroup firstParameterGroup = default(FirstParameterGroup), SecondParameterGroup secondParameterGroup = default(SecondParameterGroup), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

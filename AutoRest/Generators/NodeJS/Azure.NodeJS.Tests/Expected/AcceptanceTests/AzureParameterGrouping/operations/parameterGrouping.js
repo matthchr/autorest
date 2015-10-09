@@ -35,15 +35,18 @@ function ParameterGrouping(client) {
 /**
  * Post a bunch of required parameters grouped
  *
- * @param {object} parameters Additional parameters for the operation
+ * @param {object} parameterGroupingPostRequiredParameters Additional
+ * parameters for the operation
  * 
- * @param {number} [parameters.body]
+ * @param {number} [parameterGroupingPostRequiredParameters.body]
  * 
- * @param {string} [parameters.header]
+ * @param {string} [parameterGroupingPostRequiredParameters.header]
  * 
- * @param {number} [parameters.query] Query parameter with default
+ * @param {number} [parameterGroupingPostRequiredParameters.query] Query
+ * parameter with default
  * 
- * @param {string} [parameters.path] Path parameter
+ * @param {string} [parameterGroupingPostRequiredParameters.path] Path
+ * parameter
  * 
  * @param {object} [options]
  *
@@ -62,7 +65,7 @@ function ParameterGrouping(client) {
  *
  *                      {stream} [response] - The HTTP Response stream if an error did not occur.
  */
-ParameterGrouping.prototype.postRequired = function (parameters, options, callback) {
+ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequiredParameters, options, callback) {
   var client = this.client;
   if(!callback && typeof options === 'function') {
     callback = options;
@@ -71,29 +74,29 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  var parametersBody = (parameters ? parameters.body : undefined);
-  var parametersHeader = (parameters ? parameters.header : undefined);
-  var parametersQuery = (parameters ? parameters.query : undefined);
-  var parametersPath = (parameters ? parameters.path : undefined);
+  var parameterGroupingPostRequiredParametersBody = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.body : undefined);
+  var parameterGroupingPostRequiredParametersHeader = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.header : undefined);
+  var parameterGroupingPostRequiredParametersQuery = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.query : undefined);
+  var parameterGroupingPostRequiredParametersPath = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.path : undefined);
   // Validate
   try {
-    if (parametersBody === null || parametersBody === undefined || typeof parametersBody !== 'number') {
-      throw new Error('parametersBody cannot be null or undefined and it must be of type number.');
+    if (parameterGroupingPostRequiredParametersBody === null || parameterGroupingPostRequiredParametersBody === undefined || typeof parameterGroupingPostRequiredParametersBody !== 'number') {
+      throw new Error('parameterGroupingPostRequiredParametersBody cannot be null or undefined and it must be of type number.');
     }
-    if (parametersHeader !== null && parametersHeader !== undefined && typeof parametersHeader.valueOf() !== 'string') {
-      throw new Error('parametersHeader must be of type string.');
+    if (parameterGroupingPostRequiredParametersHeader !== null && parameterGroupingPostRequiredParametersHeader !== undefined && typeof parameterGroupingPostRequiredParametersHeader.valueOf() !== 'string') {
+      throw new Error('parameterGroupingPostRequiredParametersHeader must be of type string.');
     }
-    if (parametersQuery !== null && parametersQuery !== undefined && typeof parametersQuery !== 'number') {
-      throw new Error('parametersQuery must be of type number.');
+    if (parameterGroupingPostRequiredParametersQuery !== null && parameterGroupingPostRequiredParametersQuery !== undefined && typeof parameterGroupingPostRequiredParametersQuery !== 'number') {
+      throw new Error('parameterGroupingPostRequiredParametersQuery must be of type number.');
     }
-    if (parametersPath === null || parametersPath === undefined || typeof parametersPath.valueOf() !== 'string') {
-      throw new Error('parametersPath cannot be null or undefined and it must be of type string.');
+    if (parameterGroupingPostRequiredParametersPath === null || parameterGroupingPostRequiredParametersPath === undefined || typeof parameterGroupingPostRequiredParametersPath.valueOf() !== 'string') {
+      throw new Error('parameterGroupingPostRequiredParametersPath cannot be null or undefined and it must be of type string.');
     }
     if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
       throw new Error('this.client.acceptLanguage must be of type string.');
     }
-    if (parameters === null || parameters === undefined) {
-      throw new Error('parameters cannot be null or undefined.');
+    if (parameterGroupingPostRequiredParameters === null || parameterGroupingPostRequiredParameters === undefined) {
+      throw new Error('parameterGroupingPostRequiredParameters cannot be null or undefined.');
     }
   } catch (error) {
     return callback(error);
@@ -102,10 +105,10 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
   // Construct URL
   var requestUrl = this.client.baseUri +
                    '//parameterGrouping/postRequired/{path}';
-  requestUrl = requestUrl.replace('{path}', encodeURIComponent(parametersPath));
+  requestUrl = requestUrl.replace('{path}', encodeURIComponent(parameterGroupingPostRequiredParametersPath));
   var queryParameters = [];
-  if (parametersQuery !== null && parametersQuery !== undefined) {
-    queryParameters.push('query=' + encodeURIComponent(parametersQuery.toString()));
+  if (parameterGroupingPostRequiredParametersQuery !== null && parameterGroupingPostRequiredParametersQuery !== undefined) {
+    queryParameters.push('query=' + encodeURIComponent(parameterGroupingPostRequiredParametersQuery.toString()));
   }
   if (queryParameters.length > 0) {
     requestUrl += '?' + queryParameters.join('&');
@@ -121,8 +124,8 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
   httpRequest.url = requestUrl;
   // Set Headers
   httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
-  if (parametersHeader !== undefined && parametersHeader !== null) {
-    httpRequest.headers['header'] = parametersHeader;
+  if (parameterGroupingPostRequiredParametersHeader !== undefined && parameterGroupingPostRequiredParametersHeader !== null) {
+    httpRequest.headers['header'] = parameterGroupingPostRequiredParametersHeader;
   }
   if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
     httpRequest.headers['accept-language'] = this.client.acceptLanguage;
@@ -139,10 +142,10 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
   var requestContent = null;
   var requestModel = null;
   try {
-    if (parametersBody === null || parametersBody === undefined || typeof parametersBody !== 'number') {
-      throw new Error('parametersBody cannot be null or undefined and it must be of type number.');
+    if (parameterGroupingPostRequiredParametersBody === null || parameterGroupingPostRequiredParametersBody === undefined || typeof parameterGroupingPostRequiredParametersBody !== 'number') {
+      throw new Error('parameterGroupingPostRequiredParametersBody cannot be null or undefined and it must be of type number.');
     }
-    requestModel = parametersBody;
+    requestModel = parameterGroupingPostRequiredParametersBody;
     requestContent = JSON.stringify(requestModel);
   } catch (error) {
     var serializationError = new Error(util.format('Error "%s" occurred in serializing the payload - "%s"', error, util.inspect(requestModel, {depth: null})));
@@ -186,11 +189,13 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
 /**
  * Post a bunch of optional parameters grouped
  *
- * @param {object} [parameters] Additional parameters for the operation
+ * @param {object} [parameterGroupingPostOptionalParameters] Additional
+ * parameters for the operation
  * 
- * @param {string} [parameters.header]
+ * @param {string} [parameterGroupingPostOptionalParameters.header]
  * 
- * @param {number} [parameters.query] Query parameter with default
+ * @param {number} [parameterGroupingPostOptionalParameters.query] Query
+ * parameter with default
  * 
  * @param {object} [options]
  *
@@ -209,7 +214,7 @@ ParameterGrouping.prototype.postRequired = function (parameters, options, callba
  *
  *                      {stream} [response] - The HTTP Response stream if an error did not occur.
  */
-ParameterGrouping.prototype.postOptional = function (parameters, options, callback) {
+ParameterGrouping.prototype.postOptional = function (parameterGroupingPostOptionalParameters, options, callback) {
   var client = this.client;
   if(!callback && typeof options === 'function') {
     callback = options;
@@ -218,15 +223,15 @@ ParameterGrouping.prototype.postOptional = function (parameters, options, callba
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  var parametersHeader = (parameters ? parameters.header : undefined);
-  var parametersQuery = (parameters ? parameters.query : undefined);
+  var parameterGroupingPostOptionalParametersHeader = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.header : undefined);
+  var parameterGroupingPostOptionalParametersQuery = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.query : undefined);
   // Validate
   try {
-    if (parametersHeader !== null && parametersHeader !== undefined && typeof parametersHeader.valueOf() !== 'string') {
-      throw new Error('parametersHeader must be of type string.');
+    if (parameterGroupingPostOptionalParametersHeader !== null && parameterGroupingPostOptionalParametersHeader !== undefined && typeof parameterGroupingPostOptionalParametersHeader.valueOf() !== 'string') {
+      throw new Error('parameterGroupingPostOptionalParametersHeader must be of type string.');
     }
-    if (parametersQuery !== null && parametersQuery !== undefined && typeof parametersQuery !== 'number') {
-      throw new Error('parametersQuery must be of type number.');
+    if (parameterGroupingPostOptionalParametersQuery !== null && parameterGroupingPostOptionalParametersQuery !== undefined && typeof parameterGroupingPostOptionalParametersQuery !== 'number') {
+      throw new Error('parameterGroupingPostOptionalParametersQuery must be of type number.');
     }
     if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
       throw new Error('this.client.acceptLanguage must be of type string.');
@@ -239,8 +244,8 @@ ParameterGrouping.prototype.postOptional = function (parameters, options, callba
   var requestUrl = this.client.baseUri +
                    '//parameterGrouping/postOptional';
   var queryParameters = [];
-  if (parametersQuery !== null && parametersQuery !== undefined) {
-    queryParameters.push('query=' + encodeURIComponent(parametersQuery.toString()));
+  if (parameterGroupingPostOptionalParametersQuery !== null && parameterGroupingPostOptionalParametersQuery !== undefined) {
+    queryParameters.push('query=' + encodeURIComponent(parameterGroupingPostOptionalParametersQuery.toString()));
   }
   if (queryParameters.length > 0) {
     requestUrl += '?' + queryParameters.join('&');
@@ -256,8 +261,152 @@ ParameterGrouping.prototype.postOptional = function (parameters, options, callba
   httpRequest.url = requestUrl;
   // Set Headers
   httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
-  if (parametersHeader !== undefined && parametersHeader !== null) {
-    httpRequest.headers['header'] = parametersHeader;
+  if (parameterGroupingPostOptionalParametersHeader !== undefined && parameterGroupingPostOptionalParametersHeader !== null) {
+    httpRequest.headers['header'] = parameterGroupingPostOptionalParametersHeader;
+  }
+  if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
+    httpRequest.headers['accept-language'] = this.client.acceptLanguage;
+  }
+  if(options) {
+    for(var headerName in options['customHeaders']) {
+      if (options['customHeaders'].hasOwnProperty(headerName)) {
+        httpRequest.headers[headerName] = options['customHeaders'][headerName];
+      }
+    }
+  }
+  httpRequest.headers['Content-Type'] = 'application/json; charset=utf-8';
+  httpRequest.body = null;
+  httpRequest.headers['Content-Length'] = 0;
+  // Send Request
+  return client.pipeline(httpRequest, function (err, response, responseBody) {
+    if (err) {
+      return callback(err);
+    }
+    var statusCode = response.statusCode;
+    if (statusCode !== 200) {
+      var error = new Error(responseBody);
+      error.statusCode = response.statusCode;
+      error.request = httpRequest;
+      error.response = response;
+      if (responseBody === '') responseBody = null;
+      var parsedErrorResponse;
+      try {
+        parsedErrorResponse = JSON.parse(responseBody);
+        error.body = new client._models['ErrorModel']();
+        if (parsedErrorResponse !== null && parsedErrorResponse !== undefined) {
+          error.body.deserialize(parsedErrorResponse);
+        }
+      } catch (defaultError) {
+        error.message = util.format('Error "%s" occurred in deserializing the responseBody - "%s" for the default response.', defaultError, responseBody);
+        return callback(error);
+      }
+      return callback(error);
+    }
+    // Create Result
+    var result = null;
+    if (responseBody === '') responseBody = null;
+
+    return callback(null, result, httpRequest, response);
+  });
+};
+
+/**
+ * Post parameters from multiple different parameter groups
+ *
+ * @param {object} [firstParameterGroup] Additional parameters for the
+ * operation
+ * 
+ * @param {string} [firstParameterGroup.headerOne]
+ * 
+ * @param {number} [firstParameterGroup.queryOne] Query parameter with default
+ * 
+ * @param {object} [secondParameterGroup] Additional parameters for the
+ * operation
+ * 
+ * @param {string} [secondParameterGroup.headerTwo]
+ * 
+ * @param {number} [secondParameterGroup.queryTwo] Query parameter with default
+ * 
+ * @param {object} [options]
+ *
+ * @param {object} [options.customHeaders] headers that will be added to
+ * request
+ *
+ * @param {function} callback
+ *
+ * @returns {function} callback(err, result, request, response)
+ *
+ *                      {Error}  err        - The Error object if an error occurred, null otherwise.
+ *
+ *                      {null} [result]   - The deserialized result object.
+ *
+ *                      {object} [request]  - The HTTP Request object if an error did not occur.
+ *
+ *                      {stream} [response] - The HTTP Response stream if an error did not occur.
+ */
+ParameterGrouping.prototype.postMultipleParameterGroups = function (firstParameterGroup, secondParameterGroup, options, callback) {
+  var client = this.client;
+  if(!callback && typeof options === 'function') {
+    callback = options;
+    options = null;
+  }
+  if (!callback) {
+    throw new Error('callback cannot be null.');
+  }
+  var firstParameterGroupHeaderOne = (firstParameterGroup ? firstParameterGroup.headerOne : undefined);
+  var firstParameterGroupQueryOne = (firstParameterGroup ? firstParameterGroup.queryOne : undefined);
+  var secondParameterGroupHeaderTwo = (secondParameterGroup ? secondParameterGroup.headerTwo : undefined);
+  var secondParameterGroupQueryTwo = (secondParameterGroup ? secondParameterGroup.queryTwo : undefined);
+  // Validate
+  try {
+    if (firstParameterGroupHeaderOne !== null && firstParameterGroupHeaderOne !== undefined && typeof firstParameterGroupHeaderOne.valueOf() !== 'string') {
+      throw new Error('firstParameterGroupHeaderOne must be of type string.');
+    }
+    if (firstParameterGroupQueryOne !== null && firstParameterGroupQueryOne !== undefined && typeof firstParameterGroupQueryOne !== 'number') {
+      throw new Error('firstParameterGroupQueryOne must be of type number.');
+    }
+    if (secondParameterGroupHeaderTwo !== null && secondParameterGroupHeaderTwo !== undefined && typeof secondParameterGroupHeaderTwo.valueOf() !== 'string') {
+      throw new Error('secondParameterGroupHeaderTwo must be of type string.');
+    }
+    if (secondParameterGroupQueryTwo !== null && secondParameterGroupQueryTwo !== undefined && typeof secondParameterGroupQueryTwo !== 'number') {
+      throw new Error('secondParameterGroupQueryTwo must be of type number.');
+    }
+    if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
+      throw new Error('this.client.acceptLanguage must be of type string.');
+    }
+  } catch (error) {
+    return callback(error);
+  }
+
+  // Construct URL
+  var requestUrl = this.client.baseUri +
+                   '//parameterGrouping/postMultipleParameterGroups';
+  var queryParameters = [];
+  if (firstParameterGroupQueryOne !== null && firstParameterGroupQueryOne !== undefined) {
+    queryParameters.push('query-one=' + encodeURIComponent(firstParameterGroupQueryOne.toString()));
+  }
+  if (secondParameterGroupQueryTwo !== null && secondParameterGroupQueryTwo !== undefined) {
+    queryParameters.push('query-two=' + encodeURIComponent(secondParameterGroupQueryTwo.toString()));
+  }
+  if (queryParameters.length > 0) {
+    requestUrl += '?' + queryParameters.join('&');
+  }
+  // trim all duplicate forward slashes in the url
+  var regex = /([^:]\/)\/+/gi;
+  requestUrl = requestUrl.replace(regex, '$1');
+
+  // Create HTTP transport objects
+  var httpRequest = new WebResource();
+  httpRequest.method = 'POST';
+  httpRequest.headers = {};
+  httpRequest.url = requestUrl;
+  // Set Headers
+  httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
+  if (firstParameterGroupHeaderOne !== undefined && firstParameterGroupHeaderOne !== null) {
+    httpRequest.headers['header-one'] = firstParameterGroupHeaderOne;
+  }
+  if (secondParameterGroupHeaderTwo !== undefined && secondParameterGroupHeaderTwo !== null) {
+    httpRequest.headers['header-two'] = secondParameterGroupHeaderTwo;
   }
   if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
     httpRequest.headers['accept-language'] = this.client.acceptLanguage;

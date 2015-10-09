@@ -80,5 +80,23 @@ describe('nodejs', function () {
       });
     });
 
+    it('should allow multiple parameter groups', function (done) {
+      testClient.parameterGrouping.postMultipleParameterGroups({headerOne: header, queryOne: query}, {headerTwo: "header2", queryTwo: 42}, 
+        function (error, result, request, response) {
+          should.not.exist(error);
+          response.statusCode.should.equal(200);
+          done();
+      });
+    });
+
+    it('should allow multiple parameter groups with some defaults omitted', function (done) {
+      testClient.parameterGrouping.postMultipleParameterGroups({headerOne: header}, {queryTwo: 42}, 
+        function (error, result, request, response) {
+          should.not.exist(error);
+          response.statusCode.should.equal(200);
+          done();
+      });
+    });
+
   });
 });

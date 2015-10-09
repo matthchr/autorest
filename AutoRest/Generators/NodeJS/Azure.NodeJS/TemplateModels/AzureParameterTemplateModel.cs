@@ -25,7 +25,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                 }
                 else
                 {
-                    return AzureCodeGenerator.ParameterGroupName + CodeNamer.PascalCase(base.ParameterAccessor);
+                    return CodeNamer.CamelCase(this.ParameterGroup) + CodeNamer.PascalCase(base.ParameterAccessor);
                 }
             }
         }

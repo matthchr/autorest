@@ -687,6 +687,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
             }
         }
         
+        [Fact]
         public void ParameterGroupingTests()
         {
             const int body = 1234;
@@ -730,6 +731,18 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
 
                 //null optional paramters
                 client.ParameterGrouping.PostOptional(null);
+
+                //Multiple grouped parameters
+                FirstParameterGroup firstGroup = new FirstParameterGroup(header, query);
+                SecondParameterGroup secondGroup = new SecondParameterGroup("header2", 42);
+
+                client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);
+
+                //Multiple grouped parameters -- some optional parameters omitted
+                firstGroup = new FirstParameterGroup(header);
+                secondGroup = new SecondParameterGroup(queryTwo: 42);
+
+                client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);
             }
         }
     }

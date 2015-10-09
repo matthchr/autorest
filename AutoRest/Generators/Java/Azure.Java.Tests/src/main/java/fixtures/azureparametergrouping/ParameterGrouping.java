@@ -42,6 +42,12 @@ public interface ParameterGrouping {
         @POST("/parameterGrouping/postOptional")
         void postOptionalAsync(@Header("header") String headerParameter, @Query("query") Integer query, @Header("accept-language") String acceptLanguage, ServiceResponseCallback cb);
 
+        @POST("/parameterGrouping/postMultipleParameterGroups")
+        Response postMultipleParameterGroups(@Header("header-one") String headerOne, @Query("query-one") Integer queryOne, @Header("header-two") String headerTwo, @Query("query-two") Integer queryTwo, @Header("accept-language") String acceptLanguage) throws ServiceException;
+
+        @POST("/parameterGrouping/postMultipleParameterGroups")
+        void postMultipleParameterGroupsAsync(@Header("header-one") String headerOne, @Query("query-one") Integer queryOne, @Header("header-two") String headerTwo, @Query("query-two") Integer queryTwo, @Header("accept-language") String acceptLanguage, ServiceResponseCallback cb);
+
     }
     /**
      * Post a bunch of required parameters grouped
@@ -82,5 +88,27 @@ public interface ParameterGrouping {
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      */
     void postOptionalAsync(String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback);
+
+    /**
+     * Post parameters from multiple different parameter groups
+     *
+     * @param headerOne the String value
+     * @param queryOne Query parameter with default
+     * @param headerTwo the String value
+     * @param queryTwo Query parameter with default
+     * @throws ServiceException the exception wrapped in ServiceException if failed.
+     */
+    void postMultipleParameterGroups(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo) throws ServiceException;
+
+    /**
+     * Post parameters from multiple different parameter groups
+     *
+     * @param headerOne the String value
+     * @param queryOne Query parameter with default
+     * @param headerTwo the String value
+     * @param queryTwo Query parameter with default
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     */
+    void postMultipleParameterGroupsAsync(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo, final ServiceCallback<Void> serviceCallback);
 
 }

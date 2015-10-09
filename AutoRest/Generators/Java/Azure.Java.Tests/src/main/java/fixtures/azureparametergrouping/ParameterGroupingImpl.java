@@ -130,4 +130,52 @@ public class ParameterGroupingImpl implements ParameterGrouping {
                 .build(response, error);
     }
 
+    /**
+     * Post parameters from multiple different parameter groups
+     *
+     * @param headerOne the String value
+     * @param queryOne Query parameter with default
+     * @param headerTwo the String value
+     * @param queryTwo Query parameter with default
+     * @throws ServiceException the exception wrapped in ServiceException if failed.
+     */
+    public void postMultipleParameterGroups(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo) throws ServiceException {
+        try {
+            ServiceResponse<Void> response = postMultipleParameterGroupsDelegate(service.postMultipleParameterGroups(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage()), null);
+            response.getBody();
+        } catch (RetrofitError error) {
+            ServiceResponse<Void> response = postMultipleParameterGroupsDelegate(error.getResponse(), error);
+            response.getBody();
+        }
+    }
+
+    /**
+     * Post parameters from multiple different parameter groups
+     *
+     * @param headerOne the String value
+     * @param queryOne Query parameter with default
+     * @param headerTwo the String value
+     * @param queryTwo Query parameter with default
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     */
+    public void postMultipleParameterGroupsAsync(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo, final ServiceCallback<Void> serviceCallback) {
+        service.postMultipleParameterGroupsAsync(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage(), new ServiceResponseCallback() {
+            @Override
+            public void response(Response response, RetrofitError error) {
+                try {
+                    serviceCallback.success(postMultipleParameterGroupsDelegate(response, error));
+                } catch (ServiceException exception) {
+                    serviceCallback.failure(exception);
+                }
+            }
+        });
+    }
+
+    private ServiceResponse<Void> postMultipleParameterGroupsDelegate(Response response, RetrofitError error) throws ServiceException {
+        return new ServiceResponseBuilder<Void>()
+                .register(200, new TypeToken<Void>(){}.getType())
+                .registerError(new TypeToken<Error>(){}.getType())
+                .build(response, error);
+    }
+
 }

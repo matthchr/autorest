@@ -43,7 +43,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                 }
                 else
                 {
-                    return AzureCodeGenerator.ParameterGroupName + CodeNamer.PascalCase(base.ParameterAccessor);
+                    return CodeNamer.CamelCase(this.ParameterGroup) + CodeNamer.PascalCase(base.ParameterAccessor);
                 }
             }
         }

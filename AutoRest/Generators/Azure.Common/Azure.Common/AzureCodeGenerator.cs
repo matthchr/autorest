@@ -31,9 +31,7 @@ namespace Microsoft.Rest.Generator.Azure
         public const string ParameterGroupExtension = "x-ms-parameter-grouping";
         public const string ApiVersion = "api-version";
         public const string AcceptLanguage = "accept-language";
-
-        public const string ParameterGroupName = "parameters";
-
+        
         private const string ResourceType = "Resource";
         private const string SubResourceType = "SubResource";
         private const string ResourceProperties = "Properties";
@@ -222,8 +220,7 @@ namespace Microsoft.Rest.Generator.Azure
             foreach (Method method in serviceClient.Methods)
             {
                 //TODO: Does this group name need to be normalized later, or does that already happen?
-                string parameterGroupName = method.Group + "-" + method.Name + "-" + "Parameters";
-                List<Property> properties = new List<Property>();
+                Dictionary<string, List<Property>> properties = new Dictionary<string, List<Property>>();
                 foreach (Parameter parameter in method.Parameters)
                 {
                     if (parameter.Extensions.ContainsKey(ParameterGroupExtension))
@@ -231,28 +228,32 @@ namespace Microsoft.Rest.Generator.Azure
                         Newtonsoft.Json.Linq.JContainer extensionObject = parameter.Extensions[ParameterGroupExtension] as Newtonsoft.Json.Linq.JContainer;
                         if (extensionObject != null)
                         {
-                            bool isParameterGrouped = (bool)extensionObject["value"];
-                            if (isParameterGrouped)
-                            {
-                                parameter.ParameterGroup = parameterGroupName;
+                            string parameterGroupName = method.Group + "-" + method.Name + "-" + "Parameters";
+                            parameterGroupName = extensionObject.Value<string>("name") ?? parameterGroupName;
+                            
+                            parameter.ParameterGroup = parameterGroupName;
 
-                                properties.Add(new Property()
-                                    {
-                                        IsReadOnly = false, //Since these properties are used as parameters they are never read only
-                                        Name = CodeNamer.PascalCase(parameter.Name),
-                                        IsRequired = parameter.IsRequired,
-                                        DefaultValue = parameter.DefaultValue,
-                                        //Constraints = parameter.Constraints, TODO do these need to be copied?
-                                        Documentation = parameter.Documentation,
-                                        Type = parameter.Type,
-                                        SerializedName = null
-                                    });
+                            if (!properties.ContainsKey(parameterGroupName))
+                            {
+                                properties.Add(parameterGroupName, new List<Property>());
                             }
+
+                            properties[parameterGroupName].Add(new Property()
+                                {
+                                    IsReadOnly = false, //Since these properties are used as parameters they are never read only
+                                    Name = CodeNamer.PascalCase(parameter.Name),
+                                    IsRequired = parameter.IsRequired,
+                                    DefaultValue = parameter.DefaultValue,
+                                    //Constraints = parameter.Constraints, TODO do these need to be copied?
+                                    Documentation = parameter.Documentation,
+                                    Type = parameter.Type,
+                                    SerializedName = null //Parameter is never serialized directly
+                                });
                         }
                     }
                 }
 
-                if (method.ParameterGroups.Any())
+                foreach (string parameterGroupName in method.ParameterGroups)
                 {
                     CompositeType parameterGroupType = new CompositeType()
                         {
@@ -260,7 +261,7 @@ namespace Microsoft.Rest.Generator.Azure
                             Documentation = "Additional parameters for the " + method.Name + " operation."
                         };
                     
-                    foreach (Property property in properties)
+                    foreach (Property property in properties[parameterGroupName])
                     {
                         parameterGroupType.Properties.Add(property);
                     }
@@ -269,7 +270,7 @@ namespace Microsoft.Rest.Generator.Azure
 
                     Parameter groupedParameter = new Parameter()
                         {
-                            Name = ParameterGroupName,
+                            Name = parameterGroupName,
                             IsRequired = isGroupParameterRequired,
                             Location = ParameterLocation.None,
                             SerializedName = string.Empty,
