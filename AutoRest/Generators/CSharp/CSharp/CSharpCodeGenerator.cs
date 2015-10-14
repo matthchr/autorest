@@ -6,8 +6,6 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Rest.Generator.ClientModel;
 using Microsoft.Rest.Generator.CSharp.Templates;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Microsoft.Rest.Generator.CSharp
 {

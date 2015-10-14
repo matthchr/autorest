@@ -153,7 +153,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                     {
                         Model = new ParameterGroupTemplateModel(serviceClient, groupParameter)
                     };
-                    await Write(parameterGroupTemplate, Path.Combine("Parameters", parameterGroupTemplate.Model.ParameterGroupType + ".cs"));
+                    await Write(parameterGroupTemplate, Path.Combine("Models", parameterGroupTemplate.Model.ParameterGroupType + ".cs"));
                 }
             }
         }

@@ -6,41 +6,40 @@
 // Changes may cause incorrect behavior and will be lost if the code is
 // regenerated.
 
-namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
+namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
 {
     using System;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
 
     /// <summary>
-    /// Additional parameters for the postOptional operation.
+    /// Additional parameters for the postRequired operation.
     /// </summary>
-    public partial class ParameterGroupingPostOptionalParameters
+    public partial class ParameterGroupingPostRequiredParameters
     {
         /// <summary>
         /// Initializes a new instance of the
-        /// ParameterGroupingPostOptionalParameters class.
+        /// ParameterGroupingPostRequiredParameters class.
         /// </summary>
+        /// <param name='body'>
+        /// </param>
         /// <param name='header'>
         /// </param>
         /// <param name='query'>
         /// Query parameter with default
         /// </param>
-        public ParameterGroupingPostOptionalParameters(string header = default(string), int? query = default(int?))
+        /// <param name='path'>
+        /// Path parameter
+        /// </param>
+        public ParameterGroupingPostRequiredParameters(int? body, string path, string header = default(string), int? query = default(int?))
         {
+            Body = body;
             Header = header;
             Query = query;
+            Path = path;
         }
+
+        /// <summary>
+        /// </summary>
+        public int? Body {get;set;}
 
         /// <summary>
         /// </summary>
@@ -50,6 +49,11 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// Query parameter with default
         /// </summary>
         public int? Query {get;set;}
+
+        /// <summary>
+        /// Path parameter
+        /// </summary>
+        public string Path {get;set;}
 
     }
 }

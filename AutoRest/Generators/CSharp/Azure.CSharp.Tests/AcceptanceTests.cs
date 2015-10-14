@@ -17,6 +17,7 @@ using Fixtures.Azure.AcceptanceTestsResourceFlattening;
 using Fixtures.Azure.AcceptanceTestsResourceFlattening.Models;
 using Fixtures.Azure.AcceptanceTestsSubscriptionIdApiVersion;
 using Fixtures.Azure.AcceptanceTestsAzureParameterGrouping;
+using Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models;
 using Microsoft.Rest.Azure;
 using Microsoft.Rest.Generator.CSharp.Azure.Tests.Properties;
 using Microsoft.Rest.Generator.CSharp.Tests;
@@ -690,31 +691,31 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
         [Fact]
         public void ParameterGroupingTests()
         {
-            const int body = 1234;
-            const string header = "header";
-            const int query = 21;
-            const string path = "path";
+            const int bodyParameter = 1234;
+            const string headerParameter = "header";
+            const int queryParameter = 21;
+            const string pathParameter = "path";
 
             using (var client = new AutoRestParameterGroupingTestService(
                 Fixture.Uri, 
                 new TokenCredentials(Guid.NewGuid().ToString())))
             {
                 //Valid required parameters
-                ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters(body, path)
+                ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters(bodyParameter, pathParameter)
                     {
-                        Header = header,
-                        Query = query
+                        Header = headerParameter,
+                        Query = queryParameter
                     };
 
                 client.ParameterGrouping.PostRequired(requiredParameters);
 
                 //Required parameters but null optional parameters
-                requiredParameters = new ParameterGroupingPostRequiredParameters(body, path);
+                requiredParameters = new ParameterGroupingPostRequiredParameters(bodyParameter, pathParameter);
 
                 client.ParameterGrouping.PostRequired(requiredParameters);
 
                 //Required parameters object is not null, but a required property of the object is
-                requiredParameters = new ParameterGroupingPostRequiredParameters(null, path);
+                requiredParameters = new ParameterGroupingPostRequiredParameters(null, pathParameter);
                 Assert.Throws<ValidationException>(() => client.ParameterGrouping.PostRequired(requiredParameters));
 
                 //null required parameters
@@ -723,8 +724,8 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 //Valid optional parameters
                 ParameterGroupingPostOptionalParameters optionalParameters = new ParameterGroupingPostOptionalParameters()
                     {
-                        Header = header,
-                        Query = query
+                        Header = headerParameter,
+                        Query = queryParameter
                     };
 
                 client.ParameterGrouping.PostOptional(optionalParameters);
@@ -733,13 +734,13 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 client.ParameterGrouping.PostOptional(null);
 
                 //Multiple grouped parameters
-                FirstParameterGroup firstGroup = new FirstParameterGroup(header, query);
+                FirstParameterGroup firstGroup = new FirstParameterGroup(headerParameter, queryParameter);
                 SecondParameterGroup secondGroup = new SecondParameterGroup("header2", 42);
 
                 client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);
 
                 //Multiple grouped parameters -- some optional parameters omitted
-                firstGroup = new FirstParameterGroup(header);
+                firstGroup = new FirstParameterGroup(headerParameter);
                 secondGroup = new SecondParameterGroup(queryTwo: 42);
 
                 client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);

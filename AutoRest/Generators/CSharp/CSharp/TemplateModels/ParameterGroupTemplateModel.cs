@@ -30,11 +30,6 @@ namespace Microsoft.Rest.Generator.CSharp
             this.Documentation = compositeType.Documentation;
         }
 
-        public string ParameterGroupName
-        {
-            get { return this.groupParameter.Type.Name; }
-        }
-
         public string ParameterGroupType 
         {
             get { return this.groupParameter.Type.Name; }

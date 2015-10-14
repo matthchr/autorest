@@ -6,21 +6,9 @@
 // Changes may cause incorrect behavior and will be lost if the code is
 // regenerated.
 
-namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
+namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
 {
     using System;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Additional parameters for the postMultipleParameterGroups operation.

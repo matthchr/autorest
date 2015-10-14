@@ -18,7 +18,6 @@ namespace Microsoft.Rest.Generator.Azure.NodeJS
                 throw new ArgumentNullException("source");
             }
             
-            
             this.ClientRequestIdString = AzureCodeGenerator.GetClientRequestIdString(source);
             this.RequestIdString = AzureCodeGenerator.GetRequestIdString(source);
 

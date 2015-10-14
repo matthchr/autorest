@@ -92,7 +92,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                 ServiceClientTracing.Enter(invocationId, this, "PostRequired", tracingParameters);
             }
             // Construct URL
-            var url = new Uri(this.Client.BaseUri, "parameterGrouping/postRequired/{path}").ToString();
+            var baseUrl = this.Client.BaseUri.AbsoluteUri;
+            var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postRequired/{path}").ToString();
             url = url.Replace("{path}", Uri.EscapeDataString(parameterGroupingPostRequiredParametersPath));
             List<string> queryParameters = new List<string>();
             if (parameterGroupingPostRequiredParametersQuery != null)
@@ -220,7 +221,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                 ServiceClientTracing.Enter(invocationId, this, "PostOptional", tracingParameters);
             }
             // Construct URL
-            var url = new Uri(this.Client.BaseUri, "parameterGrouping/postOptional").ToString();
+            var baseUrl = this.Client.BaseUri.AbsoluteUri;
+            var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postOptional").ToString();
             List<string> queryParameters = new List<string>();
             if (parameterGroupingPostOptionalParametersQuery != null)
             {
@@ -349,7 +351,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                 ServiceClientTracing.Enter(invocationId, this, "PostMultipleParameterGroups", tracingParameters);
             }
             // Construct URL
-            var url = new Uri(this.Client.BaseUri, "parameterGrouping/postMultipleParameterGroups").ToString();
+            var baseUrl = this.Client.BaseUri.AbsoluteUri;
+            var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postMultipleParameterGroups").ToString();
             List<string> queryParameters = new List<string>();
             if (firstParameterGroupQueryOne != null)
             {

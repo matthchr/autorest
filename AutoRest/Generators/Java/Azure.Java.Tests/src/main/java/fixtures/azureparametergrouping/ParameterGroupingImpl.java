@@ -10,80 +10,86 @@
 
 package fixtures.azureparametergrouping;
 
-import com.google.gson.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
 import com.microsoft.rest.ServiceCallback;
 import com.microsoft.rest.ServiceException;
 import com.microsoft.rest.ServiceResponse;
 import com.microsoft.rest.ServiceResponseBuilder;
 import com.microsoft.rest.ServiceResponseCallback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import com.microsoft.rest.ServiceResponseEmptyCallback;
+import com.squareup.okhttp.ResponseBody;
+import retrofit.Retrofit;
+import retrofit.Call;
+import retrofit.Response;
 import fixtures.azureparametergrouping.models.Error;
 
 public class ParameterGroupingImpl implements ParameterGrouping {
     private ParameterGroupingService service;
     AutoRestParameterGroupingTestService client;
 
-    public ParameterGroupingImpl(RestAdapter restAdapter, AutoRestParameterGroupingTestService client) {
-        this.service = restAdapter.create(ParameterGroupingService.class);
+    public ParameterGroupingImpl(Retrofit retrofit, AutoRestParameterGroupingTestService client) {
+        this.service = retrofit.create(ParameterGroupingService.class);
         this.client = client;
     }
 
     /**
      * Post a bunch of required parameters grouped
      *
-     * @param body the int value
      * @param path Path parameter
+     * @param body the int value
      * @param headerParameter the String value
      * @param query Query parameter with default
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    public void postRequired(int body, String path, String headerParameter, Integer query) throws ServiceException {
+    public void postRequired(String path, int body, String headerParameter, Integer query) throws ServiceException {
         if (path == null) {
             throw new ServiceException(
                 new IllegalArgumentException("Parameter path is required and cannot be null."));
         }
         try {
-            ServiceResponse<Void> response = postRequiredDelegate(service.postRequired(body, headerParameter, query, path, this.client.getAcceptLanguage()), null);
+            Call<ResponseBody> call = service.postRequired(path, body, headerParameter, query, this.client.getAcceptLanguage());
+            ServiceResponse<Void> response = postRequiredDelegate(call.execute(), null);
             response.getBody();
-        } catch (RetrofitError error) {
-            ServiceResponse<Void> response = postRequiredDelegate(error.getResponse(), error);
-            response.getBody();
+        } catch (ServiceException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new ServiceException(ex);
         }
     }
 
     /**
      * Post a bunch of required parameters grouped
      *
-     * @param body the int value
      * @param path Path parameter
+     * @param body the int value
      * @param headerParameter the String value
      * @param query Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      */
-    public void postRequiredAsync(int body, String path, String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback) {
+    public Call<ResponseBody> postRequiredAsync(String path, int body, String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback) {
         if (path == null) {
             serviceCallback.failure(new ServiceException(
                 new IllegalArgumentException("Parameter path is required and cannot be null.")));
         }
-        service.postRequiredAsync(body, headerParameter, query, path, this.client.getAcceptLanguage(), new ServiceResponseCallback() {
+        Call<ResponseBody> call = service.postRequired(path, body, headerParameter, query, this.client.getAcceptLanguage());
+        call.enqueue(new ServiceResponseCallback<Void>(serviceCallback) {
             @Override
-            public void response(Response response, RetrofitError error) {
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                 try {
-                    serviceCallback.success(postRequiredDelegate(response, error));
+                    serviceCallback.success(postRequiredDelegate(response, retrofit));
                 } catch (ServiceException exception) {
                     serviceCallback.failure(exception);
                 }
             }
         });
+        return call;
     }
 
-    private ServiceResponse<Void> postRequiredDelegate(Response response, RetrofitError error) throws ServiceException {
+    private ServiceResponse<Void> postRequiredDelegate(Response<ResponseBody> response, Retrofit retrofit) throws ServiceException {
         return new ServiceResponseBuilder<Void>()
                 .register(200, new TypeToken<Void>(){}.getType())
                 .registerError(new TypeToken<Error>(){}.getType())
-                .build(response, error);
+                .build(response, retrofit);
     }
 
     /**
@@ -95,11 +101,13 @@ public class ParameterGroupingImpl implements ParameterGrouping {
      */
     public void postOptional(String headerParameter, Integer query) throws ServiceException {
         try {
-            ServiceResponse<Void> response = postOptionalDelegate(service.postOptional(headerParameter, query, this.client.getAcceptLanguage()), null);
+            Call<ResponseBody> call = service.postOptional(headerParameter, query, this.client.getAcceptLanguage());
+            ServiceResponse<Void> response = postOptionalDelegate(call.execute(), null);
             response.getBody();
-        } catch (RetrofitError error) {
-            ServiceResponse<Void> response = postOptionalDelegate(error.getResponse(), error);
-            response.getBody();
+        } catch (ServiceException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new ServiceException(ex);
         }
     }
 
@@ -110,24 +118,26 @@ public class ParameterGroupingImpl implements ParameterGrouping {
      * @param query Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      */
-    public void postOptionalAsync(String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback) {
-        service.postOptionalAsync(headerParameter, query, this.client.getAcceptLanguage(), new ServiceResponseCallback() {
+    public Call<ResponseBody> postOptionalAsync(String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback) {
+        Call<ResponseBody> call = service.postOptional(headerParameter, query, this.client.getAcceptLanguage());
+        call.enqueue(new ServiceResponseCallback<Void>(serviceCallback) {
             @Override
-            public void response(Response response, RetrofitError error) {
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                 try {
-                    serviceCallback.success(postOptionalDelegate(response, error));
+                    serviceCallback.success(postOptionalDelegate(response, retrofit));
                 } catch (ServiceException exception) {
                     serviceCallback.failure(exception);
                 }
             }
         });
+        return call;
     }
 
-    private ServiceResponse<Void> postOptionalDelegate(Response response, RetrofitError error) throws ServiceException {
+    private ServiceResponse<Void> postOptionalDelegate(Response<ResponseBody> response, Retrofit retrofit) throws ServiceException {
         return new ServiceResponseBuilder<Void>()
                 .register(200, new TypeToken<Void>(){}.getType())
                 .registerError(new TypeToken<Error>(){}.getType())
-                .build(response, error);
+                .build(response, retrofit);
     }
 
     /**
@@ -141,11 +151,13 @@ public class ParameterGroupingImpl implements ParameterGrouping {
      */
     public void postMultipleParameterGroups(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo) throws ServiceException {
         try {
-            ServiceResponse<Void> response = postMultipleParameterGroupsDelegate(service.postMultipleParameterGroups(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage()), null);
+            Call<ResponseBody> call = service.postMultipleParameterGroups(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage());
+            ServiceResponse<Void> response = postMultipleParameterGroupsDelegate(call.execute(), null);
             response.getBody();
-        } catch (RetrofitError error) {
-            ServiceResponse<Void> response = postMultipleParameterGroupsDelegate(error.getResponse(), error);
-            response.getBody();
+        } catch (ServiceException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new ServiceException(ex);
         }
     }
 
@@ -158,24 +170,26 @@ public class ParameterGroupingImpl implements ParameterGrouping {
      * @param queryTwo Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      */
-    public void postMultipleParameterGroupsAsync(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo, final ServiceCallback<Void> serviceCallback) {
-        service.postMultipleParameterGroupsAsync(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage(), new ServiceResponseCallback() {
+    public Call<ResponseBody> postMultipleParameterGroupsAsync(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo, final ServiceCallback<Void> serviceCallback) {
+        Call<ResponseBody> call = service.postMultipleParameterGroups(headerOne, queryOne, headerTwo, queryTwo, this.client.getAcceptLanguage());
+        call.enqueue(new ServiceResponseCallback<Void>(serviceCallback) {
             @Override
-            public void response(Response response, RetrofitError error) {
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                 try {
-                    serviceCallback.success(postMultipleParameterGroupsDelegate(response, error));
+                    serviceCallback.success(postMultipleParameterGroupsDelegate(response, retrofit));
                 } catch (ServiceException exception) {
                     serviceCallback.failure(exception);
                 }
             }
         });
+        return call;
     }
 
-    private ServiceResponse<Void> postMultipleParameterGroupsDelegate(Response response, RetrofitError error) throws ServiceException {
+    private ServiceResponse<Void> postMultipleParameterGroupsDelegate(Response<ResponseBody> response, Retrofit retrofit) throws ServiceException {
         return new ServiceResponseBuilder<Void>()
                 .register(200, new TypeToken<Void>(){}.getType())
                 .registerError(new TypeToken<Error>(){}.getType())
-                .build(response, error);
+                .build(response, retrofit);
     }
 
 }

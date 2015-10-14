@@ -219,7 +219,7 @@ namespace Microsoft.Rest.Generator.Azure
 
             foreach (Method method in serviceClient.Methods)
             {
-                //TODO: Does this group name need to be normalized later, or does that already happen?
+                //This group name is normalized by each languages code generator later, so it need not happen here.
                 Dictionary<string, List<Property>> properties = new Dictionary<string, List<Property>>();
                 foreach (Parameter parameter in method.Parameters)
                 {
@@ -241,10 +241,10 @@ namespace Microsoft.Rest.Generator.Azure
                             properties[parameterGroupName].Add(new Property()
                                 {
                                     IsReadOnly = false, //Since these properties are used as parameters they are never read only
-                                    Name = CodeNamer.PascalCase(parameter.Name),
+                                    Name = parameter.Name,
                                     IsRequired = parameter.IsRequired,
                                     DefaultValue = parameter.DefaultValue,
-                                    //Constraints = parameter.Constraints, TODO do these need to be copied?
+                                    //Constraints = parameter.Constraints, Omit these since we don't want to perform parameter validation
                                     Documentation = parameter.Documentation,
                                     Type = parameter.Type,
                                     SerializedName = null //Parameter is never serialized directly
