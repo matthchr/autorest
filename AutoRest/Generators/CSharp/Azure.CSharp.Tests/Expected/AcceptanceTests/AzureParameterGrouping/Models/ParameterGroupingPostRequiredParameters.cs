@@ -21,7 +21,7 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
         /// </summary>
         /// <param name='body'>
         /// </param>
-        /// <param name='header'>
+        /// <param name='customHeader'>
         /// </param>
         /// <param name='query'>
         /// Query parameter with default
@@ -29,10 +29,10 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
         /// <param name='path'>
         /// Path parameter
         /// </param>
-        public ParameterGroupingPostRequiredParameters(int? body, string path, string header = default(string), int? query = default(int?))
+        public ParameterGroupingPostRequiredParameters(int? body, string path, string customHeader = default(string), int? query = default(int?))
         {
             Body = body;
-            Header = header;
+            CustomHeader = customHeader;
             Query = query;
             Path = path;
         }
@@ -43,7 +43,7 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
 
         /// <summary>
         /// </summary>
-        public string Header {get;set;}
+        public string CustomHeader {get;set;}
 
         /// <summary>
         /// Query parameter with default

@@ -52,6 +52,11 @@ namespace Microsoft.Rest.Generator.ClientModel
         public Property ClientProperty { get; set; }
 
         /// <summary>
+        /// Gets or sets whether this parameter is a parameter group.
+        /// </summary>
+        public bool IsParameterGroup { get; set; }
+
+        /// <summary>
         /// Gets or sets the constraints.
         /// </summary>
         public Dictionary<Constraint, string> Constraints { get; private set; }
@@ -70,17 +75,7 @@ namespace Microsoft.Rest.Generator.ClientModel
         /// Gets or sets the documentation.
         /// </summary>
         public string Documentation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the parameter group.
-        /// </summary>
-        public string ParameterGroup { get; set; }
-
-        /// <summary>
-        /// True if this parameter represents a parameter group, false otherwise
-        /// </summary>
-        public bool IsParameterGroup { get; set; }
-
+        
         /// <summary>
         /// Gets vendor extensions dictionary.
         /// </summary>

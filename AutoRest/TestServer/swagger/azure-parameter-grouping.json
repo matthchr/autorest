@@ -33,7 +33,7 @@
             }
           },
           {
-            "name": "header",
+            "name": "customHeader",
             "in": "header",
             "type": "string",
             "required": false,
@@ -81,7 +81,7 @@
         "description": "Post a bunch of optional parameters grouped",
         "parameters": [
           {
-            "name": "header",
+            "name": "customHeader",
             "in": "header",
             "type": "string",
             "required": false,

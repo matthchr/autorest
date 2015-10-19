@@ -15,10 +15,7 @@ import com.microsoft.rest.ServiceException;
 import retrofit.Call;
 import com.squareup.okhttp.ResponseBody;
 import retrofit.http.POST;
-import retrofit.http.Body;
 import retrofit.http.Header;
-import retrofit.http.Query;
-import retrofit.http.Path;
 
 /**
  * An instance of this class provides access to all the operations defined
@@ -31,78 +28,58 @@ public interface ParameterGrouping {
      */
     interface ParameterGroupingService {
         @POST("/parameterGrouping/postRequired/{path}")
-        Call<ResponseBody> postRequired(@Path("path") String path, @Body int body, @Header("header") String headerParameter, @Query("query") Integer query, @Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postRequired(@Header("accept-language") String acceptLanguage);
 
         @POST("/parameterGrouping/postOptional")
-        Call<ResponseBody> postOptional(@Header("header") String headerParameter, @Query("query") Integer query, @Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postOptional(@Header("accept-language") String acceptLanguage);
 
         @POST("/parameterGrouping/postMultipleParameterGroups")
-        Call<ResponseBody> postMultipleParameterGroups(@Header("header-one") String headerOne, @Query("query-one") Integer queryOne, @Header("header-two") String headerTwo, @Query("query-two") Integer queryTwo, @Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postMultipleParameterGroups(@Header("accept-language") String acceptLanguage);
 
     }
     /**
      * Post a bunch of required parameters grouped
      *
-     * @param path Path parameter
-     * @param body the int value
-     * @param headerParameter the String value
-     * @param query Query parameter with default
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postRequired(String path, int body, String headerParameter, Integer query) throws ServiceException;
+    void postRequired() throws ServiceException;
 
     /**
      * Post a bunch of required parameters grouped
      *
-     * @param path Path parameter
-     * @param body the int value
-     * @param headerParameter the String value
-     * @param query Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postRequiredAsync(String path, int body, String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postRequiredAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * Post a bunch of optional parameters grouped
      *
-     * @param headerParameter the String value
-     * @param query Query parameter with default
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postOptional(String headerParameter, Integer query) throws ServiceException;
+    void postOptional() throws ServiceException;
 
     /**
      * Post a bunch of optional parameters grouped
      *
-     * @param headerParameter the String value
-     * @param query Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postOptionalAsync(String headerParameter, Integer query, final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postOptionalAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * Post parameters from multiple different parameter groups
      *
-     * @param headerOne the String value
-     * @param queryOne Query parameter with default
-     * @param headerTwo the String value
-     * @param queryTwo Query parameter with default
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postMultipleParameterGroups(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo) throws ServiceException;
+    void postMultipleParameterGroups() throws ServiceException;
 
     /**
      * Post parameters from multiple different parameter groups
      *
-     * @param headerOne the String value
-     * @param queryOne Query parameter with default
-     * @param headerTwo the String value
-     * @param queryTwo Query parameter with default
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postMultipleParameterGroupsAsync(String headerOne, Integer queryOne, String headerTwo, Integer queryTwo, final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postMultipleParameterGroupsAsync(final ServiceCallback<Void> serviceCallback);
 
 }

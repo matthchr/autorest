@@ -24,6 +24,7 @@ namespace Microsoft.Rest.Generator.ClientModel
             Parameters = new List<Parameter>();
             RequestHeaders = new Dictionary<string, string>();
             Responses = new Dictionary<HttpStatusCode, IType>();
+            ParameterExpansions = new Dictionary<string, Dictionary<Property, Parameter>>();
         }
 
         /// <summary>
@@ -59,23 +60,18 @@ namespace Microsoft.Rest.Generator.ClientModel
         public List<Parameter> Parameters { get; private set; }
 
         /// <summary>
+        /// Gets the list of Parameter Expansions
+        /// </summary>
+        public Dictionary<string, Dictionary<Property, Parameter>> ParameterExpansions { get; private set; }
+        
+        /// <summary>
         /// Gets the parameter groups.
         /// </summary>
         public IEnumerable<string> ParameterGroups
         {
             get
             {
-                List<string> parameterGroups = new List<string>();
-                
-                foreach (Parameter parameter in this.Parameters)
-                {
-                    if (!string.IsNullOrEmpty(parameter.ParameterGroup))
-                    {
-                        parameterGroups.Add(parameter.ParameterGroup);
-                    }
-                }
-
-                return parameterGroups.Distinct();
+                return this.ParameterExpansions.Keys;
             }
         }
 
@@ -152,11 +148,57 @@ namespace Microsoft.Rest.Generator.ClientModel
             newMethod.Parameters = new List<Parameter>();
             newMethod.RequestHeaders = new Dictionary<string, string>();
             newMethod.Responses = new Dictionary<HttpStatusCode, IType>();
+            newMethod.ParameterExpansions = new Dictionary<string, Dictionary<Property, Parameter>>();
             this.Extensions.ForEach(e => newMethod.Extensions[e.Key] = e.Value);
             this.Parameters.ForEach(p => newMethod.Parameters.Add((Parameter)p.Clone()));
+            this.ParameterExpansions.ForEach(p =>
+                {
+                    newMethod.ParameterExpansions.Add(p.Key, new Dictionary<Property, Parameter>());
+                    p.Value.ForEach(inner => newMethod.ParameterExpansions[p.Key].Add(inner.Key, inner.Value));
+                });
             this.RequestHeaders.ForEach(r => newMethod.RequestHeaders[r.Key] = r.Value);
             this.Responses.ForEach(r => newMethod.Responses[r.Key] = r.Value);
             return newMethod;
         }
+        
+        /// <summary>
+        /// Adds a new grouped parameter.
+        /// </summary>
+        /// <param name="parameterGroupType">The composite type of the parameter group.</param>
+        /// <param name="parameterGroupProperty">The property on the parameter group which represents the grouped parameter.</param>
+        /// <param name="groupedParameter">The grouped parameter.</param>
+        public void AddGroupedParameter(string parameterGroupType, Property parameterGroupProperty, Parameter groupedParameter)
+        {
+            if (!this.ParameterExpansions.ContainsKey(parameterGroupType))
+            {
+                this.ParameterExpansions.Add(parameterGroupType, new Dictionary<Property, Parameter>());
+            }
+
+            Dictionary<Property, Parameter> propertyToParameterMapping = this.ParameterExpansions[parameterGroupType];
+            propertyToParameterMapping[parameterGroupProperty] = groupedParameter;
+        }
+
+        /// <summary>
+        /// Retrives a dictionary of Property -> Parameter mappings.
+        /// </summary>
+        /// <param name="parameterGroupType">The type of the parameter group.</param>
+        /// <returns>A dictionary of Property -> Parameter mappings.</returns>
+        public IReadOnlyDictionary<Property, Parameter> GetGroupedParameters(string parameterGroupType)
+        {
+            return this.ParameterExpansions[parameterGroupType];
+        }
+
+        /// <summary>
+        /// Updates a grouped parameter to have a new name.
+        /// </summary>
+        /// <param name="originalName">The original name of the grouped parameter.</param>
+        /// <param name="newName">The new name of the grouped parameter.</param>
+        public void UpdateGroupedParameterName(string originalName, string newName)
+        {
+            Dictionary<Property, Parameter> propertyToParameterMapping = this.ParameterExpansions[originalName];
+            this.ParameterExpansions.Remove(originalName);
+            this.ParameterExpansions.Add(newName, propertyToParameterMapping);
+        }
+
     }
 }

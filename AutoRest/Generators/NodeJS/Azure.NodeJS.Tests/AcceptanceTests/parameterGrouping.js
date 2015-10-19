@@ -25,7 +25,7 @@ describe('nodejs', function () {
   describe('Azure Parameter Grouping', function () {
     var testClient = new parametersTestClient(credentials, baseUri, clientOptions);
     it('should accept valid required parameters', function (done) {
-      testClient.parameterGrouping.postRequired({body: body, header: header, query: query, path: path}, 
+      testClient.parameterGrouping.postRequired({body: body, customHeader: header, query: query, path: path}, 
           function (error, result, request, response) {
         should.not.exist(error);
         response.statusCode.should.equal(200);
@@ -64,7 +64,7 @@ describe('nodejs', function () {
     });
 
     it('should accept valid optional parameters', function (done) {
-      testClient.parameterGrouping.postOptional({header: header, query: query}, 
+      testClient.parameterGrouping.postOptional({customHeader: header, query: query}, 
           function (error, result, request, response) {
         should.not.exist(error);
         response.statusCode.should.equal(200);

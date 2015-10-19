@@ -54,16 +54,17 @@
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  @foreach (var groupParameter in Model.ParameterTemplateModels.Where(p => p.IsParameterGroup))
+  @foreach (var parameterGroup in Model.Parameters.Where(p => p.IsParameterGroup))
   {
-    var type = groupParameter.Type as CompositeType;
-    foreach (var property in type.Properties)
+    var parametersMap = Model.GetGroupedParameters(parameterGroup.Type.Name);
+    foreach (var property in parametersMap.Keys)
     {
-  @:var @(groupParameter.Name)@(CodeNamer.PascalCase(property.Name)) = @string.Format(CultureInfo.InvariantCulture, "({0} ? {0}.{1} : undefined)", groupParameter.Name, property.Name);
+        var parameter = parametersMap[property];
+  @:var @(parameter.Name) = @string.Format(CultureInfo.InvariantCulture, "({0} ? {0}.{1} : undefined)", parameterGroup.Name, property.Name);
     }
   }
 
-  @if (Model.ParameterTemplateModels.Any())
+  @if (Model.LogicalParameters.Any())
   {
       var validationBlock = Model.ValidationString;
   if (!string.IsNullOrWhiteSpace(validationBlock))
@@ -100,10 +101,10 @@
 
   // Set Headers
   @(Model.SetDefaultHeaders)
-  @foreach (var parameter in Model.ParameterTemplateModels.Where(p => p.Location == ParameterLocation.Header))
+  @foreach (var parameter in Model.LogicalParameters.Where(p => p.Location == ParameterLocation.Header))
   {
-  @:if (@(parameter.ParameterAccessor) !== undefined && @(parameter.ParameterAccessor) !== null) {
-  @:  httpRequest.headers['@(parameter.SerializedName)'] = @parameter.Type.ToString(parameter.ParameterAccessor);
+  @:if (@(parameter.Name) !== undefined && @(parameter.Name) !== null) {
+  @:  httpRequest.headers['@(parameter.SerializedName)'] = @parameter.Type.ToString(parameter.Name);
   @:}
   }
   if(options) {
@@ -135,7 +136,7 @@
   }
   else
   {
-    @:@(Model.RequestBody.Type.SerializeType(Model.Scope, Model.RequestBody.ParameterAccessor, "requestModel", Model.RequestBody.IsRequired))
+    @:@(Model.RequestBody.Type.SerializeType(Model.Scope, Model.RequestBody.Name, "requestModel", Model.RequestBody.IsRequired))
     @:requestContent = JSON.stringify(requestModel);
   }
   } catch (error) {

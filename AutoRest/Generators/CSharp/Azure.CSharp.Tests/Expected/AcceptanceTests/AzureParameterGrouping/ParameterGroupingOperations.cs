@@ -52,7 +52,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// Post a bunch of required parameters grouped
         /// </summary>
         /// <param name='parameterGroupingPostRequiredParameters'>
-        /// Additional parameters for the operation/// </param>
+        /// Additional parameters for the operation
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -61,21 +62,17 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// </param>
         public async Task<AzureOperationResponse> PostRequiredWithHttpMessagesAsync(ParameterGroupingPostRequiredParameters parameterGroupingPostRequiredParameters, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var parameterGroupingPostRequiredParametersBody = (parameterGroupingPostRequiredParameters == null ? default(int?) : parameterGroupingPostRequiredParameters.Body);
-            var parameterGroupingPostRequiredParametersHeader = (parameterGroupingPostRequiredParameters == null ? default(string) : parameterGroupingPostRequiredParameters.Header);
-            var parameterGroupingPostRequiredParametersQuery = (parameterGroupingPostRequiredParameters == null ? default(int?) : parameterGroupingPostRequiredParameters.Query);
-            var parameterGroupingPostRequiredParametersPath = (parameterGroupingPostRequiredParameters == null ? default(string) : parameterGroupingPostRequiredParameters.Path);
-            if (parameterGroupingPostRequiredParametersBody == null)
+            var body = (parameterGroupingPostRequiredParameters == null ? default(int?) : parameterGroupingPostRequiredParameters.Body);
+            var customHeader = (parameterGroupingPostRequiredParameters == null ? default(string) : parameterGroupingPostRequiredParameters.CustomHeader);
+            var query = (parameterGroupingPostRequiredParameters == null ? default(int?) : parameterGroupingPostRequiredParameters.Query);
+            var path = (parameterGroupingPostRequiredParameters == null ? default(string) : parameterGroupingPostRequiredParameters.Path);
+            if (body == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "body");
             }
-            if (parameterGroupingPostRequiredParametersPath == null)
+            if (path == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "path");
-            }
-            if (parameterGroupingPostRequiredParameters == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "parameterGroupingPostRequiredParameters");
             }
             // Tracing
             bool shouldTrace = ServiceClientTracing.IsEnabled;
@@ -84,21 +81,21 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             {
                 invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("body", parameterGroupingPostRequiredParametersBody);
-                tracingParameters.Add("header", parameterGroupingPostRequiredParametersHeader);
-                tracingParameters.Add("query", parameterGroupingPostRequiredParametersQuery);
-                tracingParameters.Add("path", parameterGroupingPostRequiredParametersPath);
+                tracingParameters.Add("body", body);
+                tracingParameters.Add("customHeader", customHeader);
+                tracingParameters.Add("query", query);
+                tracingParameters.Add("path", path);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(invocationId, this, "PostRequired", tracingParameters);
             }
             // Construct URL
             var baseUrl = this.Client.BaseUri.AbsoluteUri;
             var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postRequired/{path}").ToString();
-            url = url.Replace("{path}", Uri.EscapeDataString(parameterGroupingPostRequiredParametersPath));
+            url = url.Replace("{path}", Uri.EscapeDataString(path));
             List<string> queryParameters = new List<string>();
-            if (parameterGroupingPostRequiredParametersQuery != null)
+            if (query != null)
             {
-                queryParameters.Add(string.Format("query={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(parameterGroupingPostRequiredParametersQuery, this.Client.SerializationSettings).Trim('"'))));
+                queryParameters.Add(string.Format("query={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(query, this.Client.SerializationSettings).Trim('"'))));
             }
             if (queryParameters.Count > 0)
             {
@@ -110,14 +107,6 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             httpRequest.RequestUri = new Uri(url);
             // Set Headers
             httpRequest.Headers.TryAddWithoutValidation("x-ms-client-request-id", Guid.NewGuid().ToString());
-            if (parameterGroupingPostRequiredParametersHeader != null)
-            {
-                if (httpRequest.Headers.Contains("header"))
-                {
-                    httpRequest.Headers.Remove("header");
-                }
-                httpRequest.Headers.TryAddWithoutValidation("header", parameterGroupingPostRequiredParametersHeader);
-            }
             if (this.Client.AcceptLanguage != null)
             {
                 if (httpRequest.Headers.Contains("accept-language"))
@@ -125,6 +114,14 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                     httpRequest.Headers.Remove("accept-language");
                 }
                 httpRequest.Headers.TryAddWithoutValidation("accept-language", this.Client.AcceptLanguage);
+            }
+            if (customHeader != null)
+            {
+                if (httpRequest.Headers.Contains("customHeader"))
+                {
+                    httpRequest.Headers.Remove("customHeader");
+                }
+                httpRequest.Headers.TryAddWithoutValidation("customHeader", customHeader);
             }
             if (customHeaders != null)
             {
@@ -145,7 +142,7 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                 await this.Client.Credentials.ProcessHttpRequestAsync(httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Serialize Request
-            string requestContent = JsonConvert.SerializeObject(parameterGroupingPostRequiredParametersBody, this.Client.SerializationSettings);
+            string requestContent = JsonConvert.SerializeObject(body, this.Client.SerializationSettings);
             httpRequest.Content = new StringContent(requestContent, Encoding.UTF8);
             httpRequest.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             // Send Request
@@ -197,7 +194,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// Post a bunch of optional parameters grouped
         /// </summary>
         /// <param name='parameterGroupingPostOptionalParameters'>
-        /// Additional parameters for the operation/// </param>
+        /// Additional parameters for the operation
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -206,8 +204,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// </param>
         public async Task<AzureOperationResponse> PostOptionalWithHttpMessagesAsync(ParameterGroupingPostOptionalParameters parameterGroupingPostOptionalParameters = default(ParameterGroupingPostOptionalParameters), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var parameterGroupingPostOptionalParametersHeader = (parameterGroupingPostOptionalParameters == null ? default(string) : parameterGroupingPostOptionalParameters.Header);
-            var parameterGroupingPostOptionalParametersQuery = (parameterGroupingPostOptionalParameters == null ? default(int?) : parameterGroupingPostOptionalParameters.Query);
+            var customHeader = (parameterGroupingPostOptionalParameters == null ? default(string) : parameterGroupingPostOptionalParameters.CustomHeader);
+            var query = (parameterGroupingPostOptionalParameters == null ? default(int?) : parameterGroupingPostOptionalParameters.Query);
             // Tracing
             bool shouldTrace = ServiceClientTracing.IsEnabled;
             string invocationId = null;
@@ -215,8 +213,8 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             {
                 invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("header", parameterGroupingPostOptionalParametersHeader);
-                tracingParameters.Add("query", parameterGroupingPostOptionalParametersQuery);
+                tracingParameters.Add("customHeader", customHeader);
+                tracingParameters.Add("query", query);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(invocationId, this, "PostOptional", tracingParameters);
             }
@@ -224,9 +222,9 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             var baseUrl = this.Client.BaseUri.AbsoluteUri;
             var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postOptional").ToString();
             List<string> queryParameters = new List<string>();
-            if (parameterGroupingPostOptionalParametersQuery != null)
+            if (query != null)
             {
-                queryParameters.Add(string.Format("query={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(parameterGroupingPostOptionalParametersQuery, this.Client.SerializationSettings).Trim('"'))));
+                queryParameters.Add(string.Format("query={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(query, this.Client.SerializationSettings).Trim('"'))));
             }
             if (queryParameters.Count > 0)
             {
@@ -238,14 +236,6 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             httpRequest.RequestUri = new Uri(url);
             // Set Headers
             httpRequest.Headers.TryAddWithoutValidation("x-ms-client-request-id", Guid.NewGuid().ToString());
-            if (parameterGroupingPostOptionalParametersHeader != null)
-            {
-                if (httpRequest.Headers.Contains("header"))
-                {
-                    httpRequest.Headers.Remove("header");
-                }
-                httpRequest.Headers.TryAddWithoutValidation("header", parameterGroupingPostOptionalParametersHeader);
-            }
             if (this.Client.AcceptLanguage != null)
             {
                 if (httpRequest.Headers.Contains("accept-language"))
@@ -253,6 +243,14 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                     httpRequest.Headers.Remove("accept-language");
                 }
                 httpRequest.Headers.TryAddWithoutValidation("accept-language", this.Client.AcceptLanguage);
+            }
+            if (customHeader != null)
+            {
+                if (httpRequest.Headers.Contains("customHeader"))
+                {
+                    httpRequest.Headers.Remove("customHeader");
+                }
+                httpRequest.Headers.TryAddWithoutValidation("customHeader", customHeader);
             }
             if (customHeaders != null)
             {
@@ -321,9 +319,11 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// Post parameters from multiple different parameter groups
         /// </summary>
         /// <param name='firstParameterGroup'>
-        /// Additional parameters for the operation/// </param>
+        /// Additional parameters for the operation
+        /// </param>
         /// <param name='secondParameterGroup'>
-        /// Additional parameters for the operation/// </param>
+        /// Additional parameters for the operation
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -332,10 +332,10 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
         /// </param>
         public async Task<AzureOperationResponse> PostMultipleParameterGroupsWithHttpMessagesAsync(FirstParameterGroup firstParameterGroup = default(FirstParameterGroup), SecondParameterGroup secondParameterGroup = default(SecondParameterGroup), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var firstParameterGroupHeaderOne = (firstParameterGroup == null ? default(string) : firstParameterGroup.HeaderOne);
-            var firstParameterGroupQueryOne = (firstParameterGroup == null ? default(int?) : firstParameterGroup.QueryOne);
-            var secondParameterGroupHeaderTwo = (secondParameterGroup == null ? default(string) : secondParameterGroup.HeaderTwo);
-            var secondParameterGroupQueryTwo = (secondParameterGroup == null ? default(int?) : secondParameterGroup.QueryTwo);
+            var headerOne = (firstParameterGroup == null ? default(string) : firstParameterGroup.HeaderOne);
+            var queryOne = (firstParameterGroup == null ? default(int?) : firstParameterGroup.QueryOne);
+            var headerTwo = (secondParameterGroup == null ? default(string) : secondParameterGroup.HeaderTwo);
+            var queryTwo = (secondParameterGroup == null ? default(int?) : secondParameterGroup.QueryTwo);
             // Tracing
             bool shouldTrace = ServiceClientTracing.IsEnabled;
             string invocationId = null;
@@ -343,10 +343,10 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             {
                 invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("headerOne", firstParameterGroupHeaderOne);
-                tracingParameters.Add("queryOne", firstParameterGroupQueryOne);
-                tracingParameters.Add("headerTwo", secondParameterGroupHeaderTwo);
-                tracingParameters.Add("queryTwo", secondParameterGroupQueryTwo);
+                tracingParameters.Add("headerOne", headerOne);
+                tracingParameters.Add("queryOne", queryOne);
+                tracingParameters.Add("headerTwo", headerTwo);
+                tracingParameters.Add("queryTwo", queryTwo);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(invocationId, this, "PostMultipleParameterGroups", tracingParameters);
             }
@@ -354,13 +354,13 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             var baseUrl = this.Client.BaseUri.AbsoluteUri;
             var url = new Uri(new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/")), "parameterGrouping/postMultipleParameterGroups").ToString();
             List<string> queryParameters = new List<string>();
-            if (firstParameterGroupQueryOne != null)
+            if (queryOne != null)
             {
-                queryParameters.Add(string.Format("query-one={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(firstParameterGroupQueryOne, this.Client.SerializationSettings).Trim('"'))));
+                queryParameters.Add(string.Format("query-one={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(queryOne, this.Client.SerializationSettings).Trim('"'))));
             }
-            if (secondParameterGroupQueryTwo != null)
+            if (queryTwo != null)
             {
-                queryParameters.Add(string.Format("query-two={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(secondParameterGroupQueryTwo, this.Client.SerializationSettings).Trim('"'))));
+                queryParameters.Add(string.Format("query-two={0}", Uri.EscapeDataString(JsonConvert.SerializeObject(queryTwo, this.Client.SerializationSettings).Trim('"'))));
             }
             if (queryParameters.Count > 0)
             {
@@ -372,22 +372,6 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
             httpRequest.RequestUri = new Uri(url);
             // Set Headers
             httpRequest.Headers.TryAddWithoutValidation("x-ms-client-request-id", Guid.NewGuid().ToString());
-            if (firstParameterGroupHeaderOne != null)
-            {
-                if (httpRequest.Headers.Contains("header-one"))
-                {
-                    httpRequest.Headers.Remove("header-one");
-                }
-                httpRequest.Headers.TryAddWithoutValidation("header-one", firstParameterGroupHeaderOne);
-            }
-            if (secondParameterGroupHeaderTwo != null)
-            {
-                if (httpRequest.Headers.Contains("header-two"))
-                {
-                    httpRequest.Headers.Remove("header-two");
-                }
-                httpRequest.Headers.TryAddWithoutValidation("header-two", secondParameterGroupHeaderTwo);
-            }
             if (this.Client.AcceptLanguage != null)
             {
                 if (httpRequest.Headers.Contains("accept-language"))
@@ -395,6 +379,22 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping
                     httpRequest.Headers.Remove("accept-language");
                 }
                 httpRequest.Headers.TryAddWithoutValidation("accept-language", this.Client.AcceptLanguage);
+            }
+            if (headerOne != null)
+            {
+                if (httpRequest.Headers.Contains("header-one"))
+                {
+                    httpRequest.Headers.Remove("header-one");
+                }
+                httpRequest.Headers.TryAddWithoutValidation("header-one", headerOne);
+            }
+            if (headerTwo != null)
+            {
+                if (httpRequest.Headers.Contains("header-two"))
+                {
+                    httpRequest.Headers.Remove("header-two");
+                }
+                httpRequest.Headers.TryAddWithoutValidation("header-two", headerTwo);
             }
             if (customHeaders != null)
             {

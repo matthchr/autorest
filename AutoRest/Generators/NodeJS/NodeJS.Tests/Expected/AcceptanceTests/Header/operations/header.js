@@ -2148,10 +2148,10 @@ Header.prototype.paramDatetimeRfc1123 = function (scenario, value, options, call
   httpRequest.headers = {};
   httpRequest.url = requestUrl;
   // Set Headers
-  if (scenario !== null) {
+  if (scenario !== undefined && scenario !== null) {
     httpRequest.headers['scenario'] = scenario;
   }
-  if (value !== null) {
+  if (value !== undefined && value !== null) {
     httpRequest.headers['value'] = value.toUTCString();
   }
   if(options) {
@@ -2252,7 +2252,7 @@ Header.prototype.responseDatetimeRfc1123 = function (scenario, options, callback
   httpRequest.headers = {};
   httpRequest.url = requestUrl;
   // Set Headers
-  if (scenario !== null) {
+  if (scenario !== undefined && scenario !== null) {
     httpRequest.headers['scenario'] = scenario;
   }
   if(options) {

@@ -22,7 +22,14 @@ namespace Microsoft.Rest.Generator.NodeJS
         {
             this.LoadFrom(source);
             ParameterTemplateModels = new List<ParameterTemplateModel>();
+            GroupedParameterTemplateModels = new List<ParameterTemplateModel>();
             source.Parameters.ForEach(p => ParameterTemplateModels.Add(new ParameterTemplateModel(p)));
+
+            foreach (string parameterGroupType in source.ParameterGroups)
+            {
+                source.GetGroupedParameters(parameterGroupType).Values.ForEach(p => GroupedParameterTemplateModels.Add(new ParameterTemplateModel(p)));
+            }
+
             ServiceClient = serviceClient;
             if (source.Group != null)
             {
@@ -38,7 +45,17 @@ namespace Microsoft.Rest.Generator.NodeJS
 
         public ServiceClient ServiceClient { get; set; }
 
-        public List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
+        protected List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
+
+        protected List<ParameterTemplateModel> GroupedParameterTemplateModels { get; private set; }
+
+        /// <summary>
+        /// Returns the list of parameters as specified in the Swagger specification.
+        /// </summary>
+        public IEnumerable<ParameterTemplateModel> LogicalParameters
+        {
+            get { return this.ParameterTemplateModels.Where(p => !p.IsParameterGroup).Union(this.GroupedParameterTemplateModels); }
+        }
 
         public IScopeProvider Scope
         {
@@ -153,7 +170,7 @@ namespace Microsoft.Rest.Generator.NodeJS
             get
             {
                 return ParameterTemplateModels.Where(
-                    p => p != null && p.ClientProperty == null && string.IsNullOrEmpty(p.ParameterGroup) && !string.IsNullOrWhiteSpace(p.Name))
+                    p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
                     .OrderBy(item => !item.IsRequired);
             }
         }
@@ -417,22 +434,22 @@ namespace Microsoft.Rest.Generator.NodeJS
             get 
             {
                 var builder = new IndentedStringBuilder("  ");
-                foreach (var parameter in ParameterTemplateModels)
+                foreach (var parameter in LogicalParameters)
                 {
                     if ((HttpMethod == HttpMethod.Patch && parameter.Type is CompositeType))
                     {
                         if (parameter.IsRequired)
                         {
-                            builder.AppendLine("if ({0} === null || {0} === undefined) {{", parameter.ParameterAccessor)
+                            builder.AppendLine("if ({0} === null || {0} === undefined) {{", parameter.Name)
                                      .Indent()
-                                     .AppendLine("throw new Error('{0} cannot be null or undefined.');", parameter.ParameterAccessor)
+                                     .AppendLine("throw new Error('{0} cannot be null or undefined.');", parameter.Name)
                                    .Outdent()
                                    .AppendLine("}");
                         }
                     }
 
                     {
-                        builder.AppendLine(parameter.Type.ValidateType(Scope, parameter.ParameterAccessor, parameter.IsRequired));
+                        builder.AppendLine(parameter.Type.ValidateType(Scope, parameter.Name, parameter.IsRequired));
                     }
                 }
                 return builder.ToString();
@@ -504,7 +521,7 @@ namespace Microsoft.Rest.Generator.NodeJS
         /// </summary>
         public ParameterTemplateModel RequestBody
         {
-            get { return ParameterTemplateModels.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
+            get { return LogicalParameters.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
         }
 
         /// <summary>
@@ -557,7 +574,7 @@ namespace Microsoft.Rest.Generator.NodeJS
         /// <returns>True if a query string is possible given the method parameters, otherwise false</returns>
         protected virtual bool HasQueryParameters()
         {
-            return ParameterTemplateModels.Any(p => p.Location == ParameterLocation.Query);
+            return LogicalParameters.Any(p => p.Location == ParameterLocation.Query);
         }
 
         /// <summary>
@@ -573,7 +590,7 @@ namespace Microsoft.Rest.Generator.NodeJS
             }
 
             builder.AppendLine("var queryParameters = [];");
-            foreach (var queryParameter in ParameterTemplateModels
+            foreach (var queryParameter in LogicalParameters
                 .Where(p => p.Location == ParameterLocation.Query))
             {
                 var queryAddFormat = "queryParameters.push('{0}=' + encodeURIComponent({1}));";
@@ -583,7 +600,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                 }
                 if (!queryParameter.IsRequired)
                 {
-                    builder.AppendLine("if ({0} !== null && {0} !== undefined) {{", queryParameter.ParameterAccessor)
+                    builder.AppendLine("if ({0} !== null && {0} !== undefined) {{", queryParameter.Name)
                         .Indent()
                         .AppendLine(queryAddFormat,
                             queryParameter.SerializedName, queryParameter.GetFormattedReferenceValue()).Outdent()
@@ -609,7 +626,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                 throw new ArgumentNullException("builder");
             }
 
-            foreach (var pathParameter in ParameterTemplateModels.Where(p => p.Location == ParameterLocation.Path))
+            foreach (var pathParameter in LogicalParameters.Where(p => p.Location == ParameterLocation.Path))
             {
                 var pathReplaceFormat = "{0} = {0}.replace('{{{1}}}', encodeURIComponent({2}));";
                 if (pathParameter.SkipUrlEncoding())
@@ -617,7 +634,7 @@ namespace Microsoft.Rest.Generator.NodeJS
                     pathReplaceFormat = "{0} = {0}.replace('{{{1}}}', {2});";
                 }
                 builder.AppendLine(pathReplaceFormat, variableName, pathParameter.SerializedName,
-                    pathParameter.Type.ToString(pathParameter.ParameterAccessor));
+                    pathParameter.Type.ToString(pathParameter.Name));
             }
         }
 

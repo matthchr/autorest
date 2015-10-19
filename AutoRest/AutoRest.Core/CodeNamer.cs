@@ -128,6 +128,18 @@ namespace Microsoft.Rest.Generator
                     parameter.Name = GetParameterName(parameter.Name);
                     parameter.Type = NormalizeType(parameter.Type);
                 }
+
+                List<string> parameterGroupList = method.ParameterGroups.ToList();
+                foreach (string parameterGroupName in parameterGroupList)
+                {
+                    foreach (Parameter p in method.GetGroupedParameters(parameterGroupName).Values)
+                    {
+                        p.Name = this.GetParameterName(p.Name);
+                    }
+                    
+                    method.UpdateGroupedParameterName(parameterGroupName, GetTypeName(parameterGroupName));
+                }
+
             }
         }
 

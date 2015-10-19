@@ -703,7 +703,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 //Valid required parameters
                 ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters(bodyParameter, pathParameter)
                     {
-                        Header = headerParameter,
+                        CustomHeader = headerParameter,
                         Query = queryParameter
                     };
 
@@ -724,7 +724,7 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 //Valid optional parameters
                 ParameterGroupingPostOptionalParameters optionalParameters = new ParameterGroupingPostOptionalParameters()
                     {
-                        Header = headerParameter,
+                        CustomHeader = headerParameter,
                         Query = queryParameter
                     };
 

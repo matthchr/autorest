@@ -10,23 +10,23 @@ var parameterGrouping = function(coverage) {
 
     router.post('/postRequired/:path', function(req, res, next) {
         if (req.body === 1234 && req.params.path === 'path' && 
-            (req.get('header') === 'header' || req.get('header') === undefined) && 
+            (req.get('customHeader') === 'header' || req.get('customHeader') === undefined) && 
             (req.query['query'] === '21' || req.query['query'] === undefined)) {
             coverage['postParameterGroupingRequiredParameters']++;
             res.status(200).end();
         } else {
             utils.send400(res, next, "Did not like the values in the req. Body: " + util.inspect(req.body) + 
-                ", Path: " + req.params.path + ", header: " + req.get('header') + ", query: " + req.query['query']);
+                ", Path: " + req.params.path + ", customHeader: " + req.get('customHeader') + ", query: " + req.query['query']);
         }
     });
 
     router.post('/postOptional', function(req, res, next) {
-        if ((req.get('header') === 'header' || req.get('header') === undefined) && 
+        if ((req.get('customHeader') === 'header' || req.get('customHeader') === undefined) && 
             (req.query['query'] === '21' || req.query['query'] === undefined)) {
             coverage['postParameterGroupingOptionalParameters']++;
             res.status(200).end();
         } else {
-            utils.send400(res, next, "Did not like the values in the req. header: " + req.get('header') + ", query: " + req.query['query']);
+            utils.send400(res, next, "Did not like the values in the req. header: " + req.get('customHeader') + ", query: " + req.query['query']);
         }
     });
     

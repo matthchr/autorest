@@ -19,7 +19,14 @@ namespace Microsoft.Rest.Generator.CSharp
         {
             this.LoadFrom(source);
             ParameterTemplateModels = new List<ParameterTemplateModel>();
+            GroupedParameterTemplateModels = new List<ParameterTemplateModel>();
             source.Parameters.ForEach(p => ParameterTemplateModels.Add(new ParameterTemplateModel(p)));
+
+            foreach (string parameterGroupType in source.ParameterGroups)
+            {
+                source.GetGroupedParameters(parameterGroupType).Values.ForEach(p => GroupedParameterTemplateModels.Add(new ParameterTemplateModel(p)));
+            }
+
             ServiceClient = serviceClient;
             MethodGroupName = source.Group ?? serviceClient.Name;
         }
@@ -28,7 +35,17 @@ namespace Microsoft.Rest.Generator.CSharp
 
         public ServiceClient ServiceClient { get; set; }
 
-        public List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
+        protected List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
+
+        protected List<ParameterTemplateModel> GroupedParameterTemplateModels { get; private set; }
+
+        /// <summary>
+        /// Returns the list of parameters as specified in the Swagger specification.
+        /// </summary>
+        public IEnumerable<ParameterTemplateModel> LogicalParameters
+        {
+            get { return this.ParameterTemplateModels.Where(p => !p.IsParameterGroup).Union(this.GroupedParameterTemplateModels); }
+        }
 
         public IScopeProvider Scope
         {
@@ -155,7 +172,7 @@ namespace Microsoft.Rest.Generator.CSharp
             {
                 return
                     ParameterTemplateModels.Where(
-                        p => p != null && p.ClientProperty == null && string.IsNullOrEmpty(p.ParameterGroup) && !string.IsNullOrWhiteSpace(p.Name))
+                        p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
                         .OrderBy(item => !item.IsRequired);
             }
         }
@@ -256,7 +273,7 @@ namespace Microsoft.Rest.Generator.CSharp
         /// </summary>
         public ParameterTemplateModel RequestBody
         {
-            get { return ParameterTemplateModels.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
+            get { return this.LogicalParameters.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
         }
 
         /// <summary>
@@ -334,20 +351,19 @@ namespace Microsoft.Rest.Generator.CSharp
         {
             var builder = new IndentedStringBuilder();
 
-            foreach (var pathParameter in ParameterTemplateModels.Where(p => p.Location == ParameterLocation.Path))
+            foreach (var pathParameter in this.LogicalParameters.Where(p => p.Location == ParameterLocation.Path))
             {
                 builder.AppendLine("{0} = {0}.Replace(\"{{{1}}}\", Uri.EscapeDataString({2}));",
                     variableName,
                     pathParameter.SerializedName,
-                    pathParameter.Type.ToString(ClientReference, pathParameter.ParameterAccessor));
+                    pathParameter.Type.ToString(ClientReference, pathParameter.Name));
             }
-            if (ParameterTemplateModels.Any(p => p.Location == ParameterLocation.Query))
+            if (this.LogicalParameters.Any(p => p.Location == ParameterLocation.Query))
             {
                 builder.AppendLine("List<string> queryParameters = new List<string>();");
-                foreach (var queryParameter in ParameterTemplateModels
-                    .Where(p => p.Location == ParameterLocation.Query))
+                foreach (var queryParameter in this.LogicalParameters.Where(p => p.Location == ParameterLocation.Query))
                 {
-                    builder.AppendLine("if ({0} != null)", queryParameter.ParameterAccessor)
+                    builder.AppendLine("if ({0} != null)", queryParameter.Name)
                         .AppendLine("{").Indent()
                         .AppendLine("queryParameters.Add(string.Format(\"{0}={{0}}\", Uri.EscapeDataString({1})));",
                             queryParameter.SerializedName, queryParameter.GetFormattedReferenceValue(ClientReference)).Outdent()

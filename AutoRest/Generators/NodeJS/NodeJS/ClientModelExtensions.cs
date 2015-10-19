@@ -28,7 +28,7 @@ namespace Microsoft.Rest.Generator.NodeJS.TemplateModels
         /// </summary>
         /// <param name="parameter">The parameter to format</param>
         /// <returns>A reference to the formatted parameter value</returns>
-        public static string GetFormattedReferenceValue(this ParameterTemplateModel parameter)
+        public static string GetFormattedReferenceValue(this Parameter parameter)
         {
             if (parameter == null)
             {
@@ -38,7 +38,7 @@ namespace Microsoft.Rest.Generator.NodeJS.TemplateModels
             SequenceType sequence = parameter.Type as SequenceType;
             if (sequence == null)
             {
-                return parameter.Type.ToString(parameter.ParameterAccessor);
+                return parameter.Type.ToString(parameter.Name);
             }
 
             PrimaryType primaryType = sequence.ElementType as PrimaryType;
@@ -57,7 +57,7 @@ namespace Microsoft.Rest.Generator.NodeJS.TemplateModels
             }
 
             return string.Format(CultureInfo.InvariantCulture,
-                "{0}.join('{1}')", parameter.ParameterAccessor, parameter.CollectionFormat.GetSeparator());
+                "{0}.join('{1}')", parameter.Name, parameter.CollectionFormat.GetSeparator());
         }
 
         /// <summary>

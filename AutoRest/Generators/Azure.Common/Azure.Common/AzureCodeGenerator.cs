@@ -220,7 +220,8 @@ namespace Microsoft.Rest.Generator.Azure
             foreach (Method method in serviceClient.Methods)
             {
                 //This group name is normalized by each languages code generator later, so it need not happen here.
-                Dictionary<string, List<Property>> properties = new Dictionary<string, List<Property>>();
+                Dictionary<string, Dictionary<Property, Parameter>> parameterGroups = new Dictionary<string, Dictionary<Property, Parameter>>();
+                
                 foreach (Parameter parameter in method.Parameters)
                 {
                     if (parameter.Extensions.ContainsKey(ParameterGroupExtension))
@@ -231,14 +232,12 @@ namespace Microsoft.Rest.Generator.Azure
                             string parameterGroupName = method.Group + "-" + method.Name + "-" + "Parameters";
                             parameterGroupName = extensionObject.Value<string>("name") ?? parameterGroupName;
                             
-                            parameter.ParameterGroup = parameterGroupName;
-
-                            if (!properties.ContainsKey(parameterGroupName))
+                            if (!parameterGroups.ContainsKey(parameterGroupName))
                             {
-                                properties.Add(parameterGroupName, new List<Property>());
+                                parameterGroups.Add(parameterGroupName, new Dictionary<Property, Parameter>());
                             }
 
-                            properties[parameterGroupName].Add(new Property()
+                            Property groupProperty = new Property()
                                 {
                                     IsReadOnly = false, //Since these properties are used as parameters they are never read only
                                     Name = parameter.Name,
@@ -248,38 +247,52 @@ namespace Microsoft.Rest.Generator.Azure
                                     Documentation = parameter.Documentation,
                                     Type = parameter.Type,
                                     SerializedName = null //Parameter is never serialized directly
-                                });
+                                };
+                            
+                            parameterGroups[parameterGroupName].Add(groupProperty, parameter);
                         }
                     }
                 }
 
-                foreach (string parameterGroupName in method.ParameterGroups)
+                foreach (string parameterGroupName in parameterGroups.Keys)
                 {
+                    //Define the new parameter group type (it's always a composite type)
                     CompositeType parameterGroupType = new CompositeType()
                         {
                             Name = parameterGroupName,
                             Documentation = "Additional parameters for the " + method.Name + " operation."
                         };
                     
-                    foreach (Property property in properties[parameterGroupName])
+                    //Populate the parameter group type with properties.
+                    foreach (Property property in parameterGroups[parameterGroupName].Keys)
                     {
                         parameterGroupType.Properties.Add(property);
                     }
 
                     bool isGroupParameterRequired = parameterGroupType.Properties.Any(p => p.IsRequired);
 
-                    Parameter groupedParameter = new Parameter()
+                    //Create the new parameter object based on the parameter group type
+                    Parameter parameterGroup = new Parameter()
                         {
                             Name = parameterGroupName,
                             IsRequired = isGroupParameterRequired,
                             Location = ParameterLocation.None,
                             SerializedName = string.Empty,
                             Type = parameterGroupType,
-                            IsParameterGroup = true,
-                            Documentation = "Additional parameters for the operation"
+                            Documentation = "Additional parameters for the operation",
+                            IsParameterGroup = true
                         };
                     
-                    method.Parameters.Add(groupedParameter);
+                    method.Parameters.Add(parameterGroup);
+
+                    //Link the grouped parameters to their parent, and remove them from the method parameters
+                    foreach (Property property in parameterGroups[parameterGroupName].Keys)
+                    {
+                        Parameter p = parameterGroups[parameterGroupName][property];
+                        
+                        method.AddGroupedParameter(parameterGroupType.Name, property, p);
+                        method.Parameters.Remove(p);
+                    }
                 }
             }
         }

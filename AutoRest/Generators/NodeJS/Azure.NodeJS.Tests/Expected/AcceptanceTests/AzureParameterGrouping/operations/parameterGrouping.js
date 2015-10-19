@@ -40,7 +40,7 @@ function ParameterGrouping(client) {
  * 
  * @param {number} [parameterGroupingPostRequiredParameters.body]
  * 
- * @param {string} [parameterGroupingPostRequiredParameters.header]
+ * @param {string} [parameterGroupingPostRequiredParameters.customHeader]
  * 
  * @param {number} [parameterGroupingPostRequiredParameters.query] Query
  * parameter with default
@@ -74,29 +74,26 @@ ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequir
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  var parameterGroupingPostRequiredParametersBody = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.body : undefined);
-  var parameterGroupingPostRequiredParametersHeader = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.header : undefined);
-  var parameterGroupingPostRequiredParametersQuery = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.query : undefined);
-  var parameterGroupingPostRequiredParametersPath = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.path : undefined);
+  var body = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.body : undefined);
+  var customHeader = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.customHeader : undefined);
+  var query = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.query : undefined);
+  var path = (parameterGroupingPostRequiredParameters ? parameterGroupingPostRequiredParameters.path : undefined);
   // Validate
   try {
-    if (parameterGroupingPostRequiredParametersBody === null || parameterGroupingPostRequiredParametersBody === undefined || typeof parameterGroupingPostRequiredParametersBody !== 'number') {
-      throw new Error('parameterGroupingPostRequiredParametersBody cannot be null or undefined and it must be of type number.');
-    }
-    if (parameterGroupingPostRequiredParametersHeader !== null && parameterGroupingPostRequiredParametersHeader !== undefined && typeof parameterGroupingPostRequiredParametersHeader.valueOf() !== 'string') {
-      throw new Error('parameterGroupingPostRequiredParametersHeader must be of type string.');
-    }
-    if (parameterGroupingPostRequiredParametersQuery !== null && parameterGroupingPostRequiredParametersQuery !== undefined && typeof parameterGroupingPostRequiredParametersQuery !== 'number') {
-      throw new Error('parameterGroupingPostRequiredParametersQuery must be of type number.');
-    }
-    if (parameterGroupingPostRequiredParametersPath === null || parameterGroupingPostRequiredParametersPath === undefined || typeof parameterGroupingPostRequiredParametersPath.valueOf() !== 'string') {
-      throw new Error('parameterGroupingPostRequiredParametersPath cannot be null or undefined and it must be of type string.');
-    }
     if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
       throw new Error('this.client.acceptLanguage must be of type string.');
     }
-    if (parameterGroupingPostRequiredParameters === null || parameterGroupingPostRequiredParameters === undefined) {
-      throw new Error('parameterGroupingPostRequiredParameters cannot be null or undefined.');
+    if (body === null || body === undefined || typeof body !== 'number') {
+      throw new Error('body cannot be null or undefined and it must be of type number.');
+    }
+    if (customHeader !== null && customHeader !== undefined && typeof customHeader.valueOf() !== 'string') {
+      throw new Error('customHeader must be of type string.');
+    }
+    if (query !== null && query !== undefined && typeof query !== 'number') {
+      throw new Error('query must be of type number.');
+    }
+    if (path === null || path === undefined || typeof path.valueOf() !== 'string') {
+      throw new Error('path cannot be null or undefined and it must be of type string.');
     }
   } catch (error) {
     return callback(error);
@@ -105,10 +102,10 @@ ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequir
   // Construct URL
   var requestUrl = this.client.baseUri +
                    '//parameterGrouping/postRequired/{path}';
-  requestUrl = requestUrl.replace('{path}', encodeURIComponent(parameterGroupingPostRequiredParametersPath));
+  requestUrl = requestUrl.replace('{path}', encodeURIComponent(path));
   var queryParameters = [];
-  if (parameterGroupingPostRequiredParametersQuery !== null && parameterGroupingPostRequiredParametersQuery !== undefined) {
-    queryParameters.push('query=' + encodeURIComponent(parameterGroupingPostRequiredParametersQuery.toString()));
+  if (query !== null && query !== undefined) {
+    queryParameters.push('query=' + encodeURIComponent(query.toString()));
   }
   if (queryParameters.length > 0) {
     requestUrl += '?' + queryParameters.join('&');
@@ -124,11 +121,11 @@ ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequir
   httpRequest.url = requestUrl;
   // Set Headers
   httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
-  if (parameterGroupingPostRequiredParametersHeader !== undefined && parameterGroupingPostRequiredParametersHeader !== null) {
-    httpRequest.headers['header'] = parameterGroupingPostRequiredParametersHeader;
-  }
   if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
     httpRequest.headers['accept-language'] = this.client.acceptLanguage;
+  }
+  if (customHeader !== undefined && customHeader !== null) {
+    httpRequest.headers['customHeader'] = customHeader;
   }
   if(options) {
     for(var headerName in options['customHeaders']) {
@@ -142,10 +139,10 @@ ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequir
   var requestContent = null;
   var requestModel = null;
   try {
-    if (parameterGroupingPostRequiredParametersBody === null || parameterGroupingPostRequiredParametersBody === undefined || typeof parameterGroupingPostRequiredParametersBody !== 'number') {
-      throw new Error('parameterGroupingPostRequiredParametersBody cannot be null or undefined and it must be of type number.');
+    if (body === null || body === undefined || typeof body !== 'number') {
+      throw new Error('body cannot be null or undefined and it must be of type number.');
     }
-    requestModel = parameterGroupingPostRequiredParametersBody;
+    requestModel = body;
     requestContent = JSON.stringify(requestModel);
   } catch (error) {
     var serializationError = new Error(util.format('Error "%s" occurred in serializing the payload - "%s"', error, util.inspect(requestModel, {depth: null})));
@@ -192,7 +189,7 @@ ParameterGrouping.prototype.postRequired = function (parameterGroupingPostRequir
  * @param {object} [parameterGroupingPostOptionalParameters] Additional
  * parameters for the operation
  * 
- * @param {string} [parameterGroupingPostOptionalParameters.header]
+ * @param {string} [parameterGroupingPostOptionalParameters.customHeader]
  * 
  * @param {number} [parameterGroupingPostOptionalParameters.query] Query
  * parameter with default
@@ -223,18 +220,18 @@ ParameterGrouping.prototype.postOptional = function (parameterGroupingPostOption
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  var parameterGroupingPostOptionalParametersHeader = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.header : undefined);
-  var parameterGroupingPostOptionalParametersQuery = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.query : undefined);
+  var customHeader = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.customHeader : undefined);
+  var query = (parameterGroupingPostOptionalParameters ? parameterGroupingPostOptionalParameters.query : undefined);
   // Validate
   try {
-    if (parameterGroupingPostOptionalParametersHeader !== null && parameterGroupingPostOptionalParametersHeader !== undefined && typeof parameterGroupingPostOptionalParametersHeader.valueOf() !== 'string') {
-      throw new Error('parameterGroupingPostOptionalParametersHeader must be of type string.');
-    }
-    if (parameterGroupingPostOptionalParametersQuery !== null && parameterGroupingPostOptionalParametersQuery !== undefined && typeof parameterGroupingPostOptionalParametersQuery !== 'number') {
-      throw new Error('parameterGroupingPostOptionalParametersQuery must be of type number.');
-    }
     if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
       throw new Error('this.client.acceptLanguage must be of type string.');
+    }
+    if (customHeader !== null && customHeader !== undefined && typeof customHeader.valueOf() !== 'string') {
+      throw new Error('customHeader must be of type string.');
+    }
+    if (query !== null && query !== undefined && typeof query !== 'number') {
+      throw new Error('query must be of type number.');
     }
   } catch (error) {
     return callback(error);
@@ -244,8 +241,8 @@ ParameterGrouping.prototype.postOptional = function (parameterGroupingPostOption
   var requestUrl = this.client.baseUri +
                    '//parameterGrouping/postOptional';
   var queryParameters = [];
-  if (parameterGroupingPostOptionalParametersQuery !== null && parameterGroupingPostOptionalParametersQuery !== undefined) {
-    queryParameters.push('query=' + encodeURIComponent(parameterGroupingPostOptionalParametersQuery.toString()));
+  if (query !== null && query !== undefined) {
+    queryParameters.push('query=' + encodeURIComponent(query.toString()));
   }
   if (queryParameters.length > 0) {
     requestUrl += '?' + queryParameters.join('&');
@@ -261,11 +258,11 @@ ParameterGrouping.prototype.postOptional = function (parameterGroupingPostOption
   httpRequest.url = requestUrl;
   // Set Headers
   httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
-  if (parameterGroupingPostOptionalParametersHeader !== undefined && parameterGroupingPostOptionalParametersHeader !== null) {
-    httpRequest.headers['header'] = parameterGroupingPostOptionalParametersHeader;
-  }
   if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
     httpRequest.headers['accept-language'] = this.client.acceptLanguage;
+  }
+  if (customHeader !== undefined && customHeader !== null) {
+    httpRequest.headers['customHeader'] = customHeader;
   }
   if(options) {
     for(var headerName in options['customHeaders']) {
@@ -353,26 +350,26 @@ ParameterGrouping.prototype.postMultipleParameterGroups = function (firstParamet
   if (!callback) {
     throw new Error('callback cannot be null.');
   }
-  var firstParameterGroupHeaderOne = (firstParameterGroup ? firstParameterGroup.headerOne : undefined);
-  var firstParameterGroupQueryOne = (firstParameterGroup ? firstParameterGroup.queryOne : undefined);
-  var secondParameterGroupHeaderTwo = (secondParameterGroup ? secondParameterGroup.headerTwo : undefined);
-  var secondParameterGroupQueryTwo = (secondParameterGroup ? secondParameterGroup.queryTwo : undefined);
+  var headerOne = (firstParameterGroup ? firstParameterGroup.headerOne : undefined);
+  var queryOne = (firstParameterGroup ? firstParameterGroup.queryOne : undefined);
+  var headerTwo = (secondParameterGroup ? secondParameterGroup.headerTwo : undefined);
+  var queryTwo = (secondParameterGroup ? secondParameterGroup.queryTwo : undefined);
   // Validate
   try {
-    if (firstParameterGroupHeaderOne !== null && firstParameterGroupHeaderOne !== undefined && typeof firstParameterGroupHeaderOne.valueOf() !== 'string') {
-      throw new Error('firstParameterGroupHeaderOne must be of type string.');
-    }
-    if (firstParameterGroupQueryOne !== null && firstParameterGroupQueryOne !== undefined && typeof firstParameterGroupQueryOne !== 'number') {
-      throw new Error('firstParameterGroupQueryOne must be of type number.');
-    }
-    if (secondParameterGroupHeaderTwo !== null && secondParameterGroupHeaderTwo !== undefined && typeof secondParameterGroupHeaderTwo.valueOf() !== 'string') {
-      throw new Error('secondParameterGroupHeaderTwo must be of type string.');
-    }
-    if (secondParameterGroupQueryTwo !== null && secondParameterGroupQueryTwo !== undefined && typeof secondParameterGroupQueryTwo !== 'number') {
-      throw new Error('secondParameterGroupQueryTwo must be of type number.');
-    }
     if (this.client.acceptLanguage !== null && this.client.acceptLanguage !== undefined && typeof this.client.acceptLanguage.valueOf() !== 'string') {
       throw new Error('this.client.acceptLanguage must be of type string.');
+    }
+    if (headerOne !== null && headerOne !== undefined && typeof headerOne.valueOf() !== 'string') {
+      throw new Error('headerOne must be of type string.');
+    }
+    if (queryOne !== null && queryOne !== undefined && typeof queryOne !== 'number') {
+      throw new Error('queryOne must be of type number.');
+    }
+    if (headerTwo !== null && headerTwo !== undefined && typeof headerTwo.valueOf() !== 'string') {
+      throw new Error('headerTwo must be of type string.');
+    }
+    if (queryTwo !== null && queryTwo !== undefined && typeof queryTwo !== 'number') {
+      throw new Error('queryTwo must be of type number.');
     }
   } catch (error) {
     return callback(error);
@@ -382,11 +379,11 @@ ParameterGrouping.prototype.postMultipleParameterGroups = function (firstParamet
   var requestUrl = this.client.baseUri +
                    '//parameterGrouping/postMultipleParameterGroups';
   var queryParameters = [];
-  if (firstParameterGroupQueryOne !== null && firstParameterGroupQueryOne !== undefined) {
-    queryParameters.push('query-one=' + encodeURIComponent(firstParameterGroupQueryOne.toString()));
+  if (queryOne !== null && queryOne !== undefined) {
+    queryParameters.push('query-one=' + encodeURIComponent(queryOne.toString()));
   }
-  if (secondParameterGroupQueryTwo !== null && secondParameterGroupQueryTwo !== undefined) {
-    queryParameters.push('query-two=' + encodeURIComponent(secondParameterGroupQueryTwo.toString()));
+  if (queryTwo !== null && queryTwo !== undefined) {
+    queryParameters.push('query-two=' + encodeURIComponent(queryTwo.toString()));
   }
   if (queryParameters.length > 0) {
     requestUrl += '?' + queryParameters.join('&');
@@ -402,14 +399,14 @@ ParameterGrouping.prototype.postMultipleParameterGroups = function (firstParamet
   httpRequest.url = requestUrl;
   // Set Headers
   httpRequest.headers['x-ms-client-request-id'] = msRestAzure.generateUuid();
-  if (firstParameterGroupHeaderOne !== undefined && firstParameterGroupHeaderOne !== null) {
-    httpRequest.headers['header-one'] = firstParameterGroupHeaderOne;
-  }
-  if (secondParameterGroupHeaderTwo !== undefined && secondParameterGroupHeaderTwo !== null) {
-    httpRequest.headers['header-two'] = secondParameterGroupHeaderTwo;
-  }
   if (this.client.acceptLanguage !== undefined && this.client.acceptLanguage !== null) {
     httpRequest.headers['accept-language'] = this.client.acceptLanguage;
+  }
+  if (headerOne !== undefined && headerOne !== null) {
+    httpRequest.headers['header-one'] = headerOne;
+  }
+  if (headerTwo !== undefined && headerTwo !== null) {
+    httpRequest.headers['header-two'] = headerTwo;
   }
   if(options) {
     for(var headerName in options['customHeaders']) {

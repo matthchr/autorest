@@ -20,10 +20,6 @@ namespace Microsoft.Rest.Generator.Azure.NodeJS
             
             this.ClientRequestIdString = AzureCodeGenerator.GetClientRequestIdString(source);
             this.RequestIdString = AzureCodeGenerator.GetRequestIdString(source);
-
-            // Clear the ParameterTemplateModels and re-populate with dervied types (AzureParameterTemplateModels)
-            ParameterTemplateModels.Clear();
-            source.Parameters.ForEach(p => ParameterTemplateModels.Add(new AzureParameterTemplateModel(p)));
         }
         
         public string ClientRequestIdString { get; private set; }
