@@ -9,6 +9,12 @@
 namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
 {
     using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Microsoft.Rest.Azure;
 
     /// <summary>
     /// Additional parameters for the postMultipleParameterGroups operation.
@@ -16,27 +22,15 @@ namespace Fixtures.Azure.AcceptanceTestsAzureParameterGrouping.Models
     public partial class SecondParameterGroup
     {
         /// <summary>
-        /// Initializes a new instance of the SecondParameterGroup class.
         /// </summary>
-        /// <param name='headerTwo'>
-        /// </param>
-        /// <param name='queryTwo'>
-        /// Query parameter with default
-        /// </param>
-        public SecondParameterGroup(string headerTwo = default(string), int? queryTwo = default(int?))
-        {
-            HeaderTwo = headerTwo;
-            QueryTwo = queryTwo;
-        }
-
-        /// <summary>
-        /// </summary>
-        public string HeaderTwo {get;set;}
+        [JsonProperty(PropertyName = "")]
+        public string HeaderTwo { get; set; }
 
         /// <summary>
         /// Query parameter with default
         /// </summary>
-        public int? QueryTwo {get;set;}
+        [JsonProperty(PropertyName = "")]
+        public int? QueryTwo { get; set; }
 
     }
 }

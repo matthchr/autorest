@@ -28,58 +28,66 @@ public interface ParameterGrouping {
      */
     interface ParameterGroupingService {
         @POST("/parameterGrouping/postRequired/{path}")
-        Call<ResponseBody> postRequired(@Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postRequired(@Header("accept-language") String acceptLanguage, String parameterGroupingPostRequiredParameters);
 
         @POST("/parameterGrouping/postOptional")
-        Call<ResponseBody> postOptional(@Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postOptional(@Header("accept-language") String acceptLanguage, String parameterGroupingPostOptionalParameters);
 
         @POST("/parameterGrouping/postMultipleParameterGroups")
-        Call<ResponseBody> postMultipleParameterGroups(@Header("accept-language") String acceptLanguage);
+        Call<ResponseBody> postMultipleParameterGroups(@Header("accept-language") String acceptLanguage, String firstParameterGroup, String secondParameterGroup);
 
     }
     /**
      * Post a bunch of required parameters grouped
      *
+     * @param parameterGroupingPostRequiredParameters Additional parameters for the operation
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postRequired() throws ServiceException;
+    void postRequired(ParameterGroupingPostRequiredParameters parameterGroupingPostRequiredParameters) throws ServiceException;
 
     /**
      * Post a bunch of required parameters grouped
      *
+     * @param parameterGroupingPostRequiredParameters Additional parameters for the operation
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postRequiredAsync(final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postRequiredAsync(ParameterGroupingPostRequiredParameters parameterGroupingPostRequiredParameters, final ServiceCallback<Void> serviceCallback);
 
     /**
      * Post a bunch of optional parameters grouped
      *
+     * @param parameterGroupingPostOptionalParameters Additional parameters for the operation
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postOptional() throws ServiceException;
+    void postOptional(ParameterGroupingPostOptionalParameters parameterGroupingPostOptionalParameters) throws ServiceException;
 
     /**
      * Post a bunch of optional parameters grouped
      *
+     * @param parameterGroupingPostOptionalParameters Additional parameters for the operation
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postOptionalAsync(final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postOptionalAsync(ParameterGroupingPostOptionalParameters parameterGroupingPostOptionalParameters, final ServiceCallback<Void> serviceCallback);
 
     /**
      * Post parameters from multiple different parameter groups
      *
+     * @param firstParameterGroup Additional parameters for the operation
+     * @param secondParameterGroup Additional parameters for the operation
      * @throws ServiceException the exception wrapped in ServiceException if failed.
      */
-    void postMultipleParameterGroups() throws ServiceException;
+    void postMultipleParameterGroups(FirstParameterGroup firstParameterGroup, SecondParameterGroup secondParameterGroup) throws ServiceException;
 
     /**
      * Post parameters from multiple different parameter groups
      *
+     * @param firstParameterGroup Additional parameters for the operation
+     * @param secondParameterGroup Additional parameters for the operation
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @return the {@link Call} object
      */
-    Call<ResponseBody> postMultipleParameterGroupsAsync(final ServiceCallback<Void> serviceCallback);
+    Call<ResponseBody> postMultipleParameterGroupsAsync(FirstParameterGroup firstParameterGroup, SecondParameterGroup secondParameterGroup, final ServiceCallback<Void> serviceCallback);
 
 }

@@ -20,3 +20,7 @@ exports.Resource = msRestAzure.Resource;
 exports.SubResource = msRestAzure.SubResource;
 exports.CloudError = msRestAzure.CloudError;
 exports.ErrorModel = require('./errorModel');
+exports.ParameterGroupingPostRequiredParameters = require('./parameterGroupingPostRequiredParameters');
+exports.ParameterGroupingPostOptionalParameters = require('./parameterGroupingPostOptionalParameters');
+exports.FirstParameterGroup = require('./firstParameterGroup');
+exports.SecondParameterGroup = require('./secondParameterGroup');

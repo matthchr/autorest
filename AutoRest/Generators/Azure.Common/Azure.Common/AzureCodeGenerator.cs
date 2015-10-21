@@ -296,7 +296,7 @@ namespace Microsoft.Rest.Generator.Azure
                         {
                             InputParameter = parameterGroup,
                             OutputParameter = p,
-                            InputParameterProperty = parameterGroupName
+                            InputParameterProperty = property.Name
                         });
                         method.Parameters.Remove(p);
                     }
