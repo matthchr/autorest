@@ -24,15 +24,8 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
             }
 
             ParameterTemplateModels.Clear();
-            GroupedParameterTemplateModels.Clear();
 
             source.Parameters.ForEach(p => ParameterTemplateModels.Add(new AzureParameterTemplateModel(p)));
-
-            //Append the grouped parameters to the parameter template models
-            foreach (string parameterGroupType in source.ParameterGroups)
-            {
-                source.GetGroupedParameters(parameterGroupType).Values.ForEach(p => GroupedParameterTemplateModels.Add(new AzureParameterTemplateModel(p)));
-            }
 
             if (MethodGroupName != ServiceClient.Name)
             {

@@ -19,14 +19,7 @@ namespace Microsoft.Rest.Generator.CSharp
         {
             this.LoadFrom(source);
             ParameterTemplateModels = new List<ParameterTemplateModel>();
-            GroupedParameterTemplateModels = new List<ParameterTemplateModel>();
             source.Parameters.ForEach(p => ParameterTemplateModels.Add(new ParameterTemplateModel(p)));
-
-            foreach (string parameterGroupType in source.ParameterGroups)
-            {
-                source.GetGroupedParameters(parameterGroupType).Values.ForEach(p => GroupedParameterTemplateModels.Add(new ParameterTemplateModel(p)));
-            }
-
             ServiceClient = serviceClient;
             MethodGroupName = source.Group ?? serviceClient.Name;
         }
@@ -36,17 +29,7 @@ namespace Microsoft.Rest.Generator.CSharp
         public ServiceClient ServiceClient { get; set; }
 
         protected List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
-
-        protected List<ParameterTemplateModel> GroupedParameterTemplateModels { get; private set; }
-
-        /// <summary>
-        /// Returns the list of parameters as specified in the Swagger specification.
-        /// </summary>
-        public IEnumerable<ParameterTemplateModel> LogicalParameters
-        {
-            get { return this.ParameterTemplateModels.Where(p => !p.IsParameterGroup).Union(this.GroupedParameterTemplateModels); }
-        }
-
+        
         public IScopeProvider Scope
         {
             get { return _scopeProvider; }
@@ -273,7 +256,10 @@ namespace Microsoft.Rest.Generator.CSharp
         /// </summary>
         public ParameterTemplateModel RequestBody
         {
-            get { return this.LogicalParameters.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
+            get
+            {
+                return this.Body != null ? new ParameterTemplateModel(this.Body) : null;                
+            }
         }
 
         /// <summary>

@@ -25,11 +25,6 @@ namespace Microsoft.Rest.Generator.NodeJS
             GroupedParameterTemplateModels = new List<ParameterTemplateModel>();
             source.Parameters.ForEach(p => ParameterTemplateModels.Add(new ParameterTemplateModel(p)));
 
-            foreach (string parameterGroupType in source.ParameterGroups)
-            {
-                source.GetGroupedParameters(parameterGroupType).Values.ForEach(p => GroupedParameterTemplateModels.Add(new ParameterTemplateModel(p)));
-            }
-
             ServiceClient = serviceClient;
             if (source.Group != null)
             {
@@ -48,14 +43,6 @@ namespace Microsoft.Rest.Generator.NodeJS
         protected List<ParameterTemplateModel> ParameterTemplateModels { get; private set; }
 
         protected List<ParameterTemplateModel> GroupedParameterTemplateModels { get; private set; }
-
-        /// <summary>
-        /// Returns the list of parameters as specified in the Swagger specification.
-        /// </summary>
-        public IEnumerable<ParameterTemplateModel> LogicalParameters
-        {
-            get { return this.ParameterTemplateModels.Where(p => !p.IsParameterGroup).Union(this.GroupedParameterTemplateModels); }
-        }
 
         public IScopeProvider Scope
         {
@@ -521,7 +508,10 @@ namespace Microsoft.Rest.Generator.NodeJS
         /// </summary>
         public ParameterTemplateModel RequestBody
         {
-            get { return LogicalParameters.FirstOrDefault(p => p.Location == ParameterLocation.Body); }
+            get
+            {
+                return this.Body != null ? new ParameterTemplateModel(this.Body) : null;
+            }
         }
 
         /// <summary>

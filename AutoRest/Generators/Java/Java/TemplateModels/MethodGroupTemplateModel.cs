@@ -48,8 +48,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 //Omit parameter group types for now since they don't get generated
-                var parameters = this.MethodTemplateModels
-                    .SelectMany(m => m.ParameterTemplateModels.Where(template => !template.IsParameterGroup));
+                var parameters = this.MethodTemplateModels.SelectMany(m => m.LogicalParameters);
 
                 var types = parameters.Select(p => p.Type)
                     .Concat(this.MethodTemplateModels.SelectMany(mtm => mtm.Responses.Select(res => res.Value)))
@@ -64,7 +63,7 @@ namespace Microsoft.Rest.Generator.Java
                     classes.Add("com.microsoft.rest.Validator");
                 }
 
-                IEnumerable<ParameterTemplateModel> nonBodyParams = parameters.Where(p => p.Location != ParameterLocation.Body);
+                var nonBodyParams = parameters.Where(p => p.Location != ParameterLocation.Body);
 
                 foreach (var param in nonBodyParams)
                 {
@@ -95,7 +94,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 IList<IType> types = this.MethodTemplateModels
-                    .SelectMany(mtm => mtm.Parameters.Where(param => !param.IsParameterGroup).Select(p => p.Type))
+                    .SelectMany(mtm => mtm.LogicalParameters.Select(p => p.Type))
                     .Concat(this.MethodTemplateModels.Select(mtm => mtm.ReturnType))
                     .Distinct()
                     .ToList();

@@ -129,17 +129,27 @@ namespace Microsoft.Rest.Generator
                     parameter.Type = NormalizeType(parameter.Type);
                 }
 
-                List<string> parameterGroupList = method.ParameterGroups.ToList();
-                foreach (string parameterGroupName in parameterGroupList)
+                foreach (var parameterMapping in method.InputParameterMappings)
                 {
-                    foreach (Parameter p in method.GetGroupedParameters(parameterGroupName).Values)
-                    {
-                        p.Name = this.GetParameterName(p.Name);
-                    }
-                    
-                    method.UpdateGroupedParameterName(parameterGroupName, GetTypeName(parameterGroupName));
-                }
+                    parameterMapping.InputParameter.Name = GetParameterName(parameterMapping.InputParameter.Name);
+                    parameterMapping.InputParameter.Type = NormalizeType(parameterMapping.InputParameter.Type);
+                    parameterMapping.OutputParameter.Name = GetParameterName(parameterMapping.OutputParameter.Name);
+                    parameterMapping.OutputParameter.Type = NormalizeType(parameterMapping.OutputParameter.Type);
 
+                    if (parameterMapping.InputParameterProperty != null)
+                    {
+                        parameterMapping.InputParameterProperty = string.Join(".", 
+                            parameterMapping.InputParameterProperty.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(p => GetPropertyName(p)));
+                    }
+
+                    if (parameterMapping.OutputParameterProperty != null)
+                    {
+                        parameterMapping.OutputParameterProperty = string.Join(".",
+                            parameterMapping.OutputParameterProperty.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(p => GetPropertyName(p)));
+                    }
+                }
             }
         }
 

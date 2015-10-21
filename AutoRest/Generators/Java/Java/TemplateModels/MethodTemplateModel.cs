@@ -51,7 +51,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 List<string> declarations = new List<string>();
-                foreach (var parameter in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
+                foreach (var parameter in ParameterTemplateModels)
                 {
                     StringBuilder declarationBuilder = new StringBuilder();
                     if (Url.Contains("{" + parameter.Name + "}"))
@@ -112,7 +112,7 @@ namespace Microsoft.Rest.Generator.Java
             get
             {
                 List<string> declarations = new List<string>();
-                foreach (var parameter in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
+                foreach (var parameter in ParameterTemplateModels)
                 {
                     if ((parameter.Location != ParameterLocation.Body)
                          && parameter.Type.NeedsSpecialSerialization())
@@ -154,8 +154,7 @@ namespace Microsoft.Rest.Generator.Java
                         param.Type != PrimaryType.Double &&
                         param.Type != PrimaryType.Boolean &&
                         param.Type != PrimaryType.Long &&
-                        param.IsRequired && 
-                        !param.IsParameterGroup)
+                        param.IsRequired)
                     {
                         yield return param;
                     }
@@ -167,7 +166,7 @@ namespace Microsoft.Rest.Generator.Java
         {
             get
             {
-                foreach (var param in ParameterTemplateModels.Where(p => !p.IsParameterGroup))
+                foreach (var param in ParameterTemplateModels)
                 {
                     if (param.Type is PrimaryType ||
                         param.Type is EnumType)
@@ -235,7 +234,7 @@ namespace Microsoft.Rest.Generator.Java
             {
                 //Omit parameter-group properties for now since Java doesn't support them yet
                 return ParameterTemplateModels.Where(
-                    p => p != null && p.ClientProperty == null && !p.IsParameterGroup && !string.IsNullOrWhiteSpace(p.Name))
+                    p => p != null && p.ClientProperty == null && !string.IsNullOrWhiteSpace(p.Name))
                     .OrderBy(item => !item.IsRequired);
             }
         }

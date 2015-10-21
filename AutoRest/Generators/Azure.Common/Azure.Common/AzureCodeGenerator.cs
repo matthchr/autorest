@@ -269,6 +269,9 @@ namespace Microsoft.Rest.Generator.Azure
                         parameterGroupType.Properties.Add(property);
                     }
 
+                    //Add to the service client
+                    serviceClient.ModelTypes.Add(parameterGroupType);
+
                     bool isGroupParameterRequired = parameterGroupType.Properties.Any(p => p.IsRequired);
 
                     //Create the new parameter object based on the parameter group type
@@ -279,8 +282,7 @@ namespace Microsoft.Rest.Generator.Azure
                             Location = ParameterLocation.None,
                             SerializedName = string.Empty,
                             Type = parameterGroupType,
-                            Documentation = "Additional parameters for the operation",
-                            IsParameterGroup = true
+                            Documentation = "Additional parameters for the operation"
                         };
                     
                     method.Parameters.Add(parameterGroup);
@@ -290,7 +292,12 @@ namespace Microsoft.Rest.Generator.Azure
                     {
                         Parameter p = parameterGroups[parameterGroupName][property];
                         
-                        method.AddGroupedParameter(parameterGroupType.Name, property, p);
+                        method.InputParameterMappings.Add(new ParameterMapping
+                        {
+                            InputParameter = parameterGroup,
+                            OutputParameter = p,
+                            InputParameterProperty = parameterGroupName
+                        });
                         method.Parameters.Remove(p);
                     }
                 }

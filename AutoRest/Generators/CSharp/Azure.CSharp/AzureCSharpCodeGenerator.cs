@@ -142,20 +142,6 @@ namespace Microsoft.Rest.Generator.CSharp.Azure
                 };
                 await Write(enumTemplate, Path.Combine("Models", enumTemplate.Model.TypeDefinitionName + ".cs"));
             }
-
-            // Parameter groups
-            foreach (Method method in serviceClient.Methods)
-            {
-                foreach (string parameterGroup in method.ParameterGroups)
-                {
-                    Parameter groupParameter = method.Parameters.First(p => string.Equals(p.Type.Name, parameterGroup, StringComparison.InvariantCultureIgnoreCase));
-                    var parameterGroupTemplate = new ParameterGroupTemplate
-                    {
-                        Model = new ParameterGroupTemplateModel(serviceClient, groupParameter)
-                    };
-                    await Write(parameterGroupTemplate, Path.Combine("Models", parameterGroupTemplate.Model.ParameterGroupType + ".cs"));
-                }
-            }
         }
     }
 }

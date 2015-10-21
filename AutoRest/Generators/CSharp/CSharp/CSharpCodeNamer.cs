@@ -67,14 +67,6 @@ namespace Microsoft.Rest.Generator.CSharp
                     {
                         parameter.Name = scope.GetVariableName(parameter.Name);
                     }
-                    
-                    if (method.ParameterGroups.Contains(parameter.Type.Name))
-                    {
-                        foreach (Parameter param in method.GetGroupedParameters(parameter.Type.Name).Values)
-                        {
-                            param.Name = scope.GetVariableName(param.Name);
-                        }
-                    }
                 }
             }
         }
