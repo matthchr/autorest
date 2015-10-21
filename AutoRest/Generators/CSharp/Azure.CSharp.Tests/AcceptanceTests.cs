@@ -697,25 +697,35 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
             const string pathParameter = "path";
 
             using (var client = new AutoRestParameterGroupingTestService(
-                Fixture.Uri, 
+                Fixture.Uri,
                 new TokenCredentials(Guid.NewGuid().ToString())))
             {
                 //Valid required parameters
-                ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters(bodyParameter, pathParameter)
-                    {
-                        CustomHeader = headerParameter,
-                        Query = queryParameter
-                    };
+                ParameterGroupingPostRequiredParameters requiredParameters = new ParameterGroupingPostRequiredParameters
+                {
+                    Body = bodyParameter,
+                    Path = pathParameter,
+                    CustomHeader = headerParameter,
+                    Query = queryParameter
+                };
 
                 client.ParameterGrouping.PostRequired(requiredParameters);
 
                 //Required parameters but null optional parameters
-                requiredParameters = new ParameterGroupingPostRequiredParameters(bodyParameter, pathParameter);
+                requiredParameters = new ParameterGroupingPostRequiredParameters
+                {
+                    Body = bodyParameter,
+                    Path = pathParameter
+                };
 
                 client.ParameterGrouping.PostRequired(requiredParameters);
 
                 //Required parameters object is not null, but a required property of the object is
-                requiredParameters = new ParameterGroupingPostRequiredParameters(null, pathParameter);
+                requiredParameters = new ParameterGroupingPostRequiredParameters
+                {
+                    Path = pathParameter,
+                };
+
                 Assert.Throws<ValidationException>(() => client.ParameterGrouping.PostRequired(requiredParameters));
 
                 //null required parameters
@@ -723,10 +733,10 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
 
                 //Valid optional parameters
                 ParameterGroupingPostOptionalParameters optionalParameters = new ParameterGroupingPostOptionalParameters()
-                    {
-                        CustomHeader = headerParameter,
-                        Query = queryParameter
-                    };
+                {
+                    CustomHeader = headerParameter,
+                    Query = queryParameter
+                };
 
                 client.ParameterGrouping.PostOptional(optionalParameters);
 
@@ -734,14 +744,28 @@ namespace Microsoft.Rest.Generator.CSharp.Azure.Tests
                 client.ParameterGrouping.PostOptional(null);
 
                 //Multiple grouped parameters
-                FirstParameterGroup firstGroup = new FirstParameterGroup(headerParameter, queryParameter);
-                SecondParameterGroup secondGroup = new SecondParameterGroup("header2", 42);
+                FirstParameterGroup firstGroup = new FirstParameterGroup
+                {
+                    HeaderOne = headerParameter,
+                    QueryOne = queryParameter
+                };
+                SecondParameterGroup secondGroup = new SecondParameterGroup
+                {
+                    HeaderTwo = "header2",
+                    QueryTwo = 42
+                };
 
                 client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);
 
                 //Multiple grouped parameters -- some optional parameters omitted
-                firstGroup = new FirstParameterGroup(headerParameter);
-                secondGroup = new SecondParameterGroup(queryTwo: 42);
+                firstGroup = new FirstParameterGroup
+                {
+                    HeaderOne = headerParameter
+                };
+                secondGroup = new SecondParameterGroup
+                {
+                    QueryTwo = 42
+                };
 
                 client.ParameterGrouping.PostMultipleParameterGroups(firstGroup, secondGroup);
             }
